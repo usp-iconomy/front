@@ -1,0 +1,32 @@
+.row {
+  display: flex;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  max-width: 420px;
+}
+
+.input {
+  flex: 1;
+}
+
+.feedback {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-4);
+  min-height: 1.5em;
+}
+
+.success {
+  color: var(--color-positive);
+}
+
+.error {
+  color: var(--color-negative);
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,40 @@
+.nav {
+  display: none;
+}
+
+.link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Top-aligned so a two-line label ("Tokens Alma") keeps every icon on the
+     same baseline instead of shifting its own item down. */
+  justify-content: flex-start;
+  gap: 3px;
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.active {
+  color: var(--color-accent-strong);
+}
+
+@media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: var(--z-bottom-nav);
+    display: flex;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    box-shadow: var(--shadow-nav);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
