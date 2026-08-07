@@ -1,0 +1,73 @@
+import type { Course } from '@/types/domain'
+
+export const courses: readonly Course[] = [
+  {
+    id: 'economia-simbolica-101',
+    title: 'Economia Simbólica 101',
+    instructor: 'Dra. Marina Silva',
+    description: 'Fundamentos de economias baseadas em circulação de conhecimento.',
+    accessTypes: ['open'],
+    participants: 234,
+    workloadHours: 12,
+    issuesSbt: true,
+    inPerson: false,
+  },
+  {
+    id: 'tecnologia-e-descolonialidade',
+    title: 'Tecnologia e Descolonialidade',
+    instructor: 'Prof. João Santos',
+    description: 'Tecnologia em contextos de justiça social e inclusão comunitária.',
+    accessTypes: ['circulation', 'distribution_code'],
+    participants: 156,
+    workloadHours: 20,
+    issuesSbt: true,
+    inPerson: false,
+  },
+  {
+    id: 'design-comunitario',
+    title: 'Design Comunitário',
+    instructor: 'Profa. Ana Costa',
+    description: 'Design thinking para soluções locais e participativas.',
+    accessTypes: ['open'],
+    participants: 89,
+    workloadHours: 16,
+    issuesSbt: true,
+    inPerson: true,
+  },
+  {
+    id: 'governanca-de-dados',
+    title: 'Governança de Dados',
+    instructor: 'Prof. Lucas Oliveira',
+    description: 'Soberania de dados e privacidade em plataformas comunitárias.',
+    accessTypes: ['sbt'],
+    participants: 45,
+    workloadHours: 24,
+    issuesSbt: true,
+    inPerson: false,
+  },
+  {
+    id: 'lideranca-feminista',
+    title: 'Liderança Feminista',
+    instructor: 'Profa. Carla Mendes',
+    description: 'Práticas de liderança inclusiva e anti-opressiva.',
+    accessTypes: ['circulation'],
+    participants: 167,
+    workloadHours: 18,
+    issuesSbt: true,
+    inPerson: false,
+  },
+  {
+    id: 'impacto-social-medido',
+    title: 'Impacto Social Medido',
+    instructor: 'Prof. Ricardo Alves',
+    description: 'Ferramentas para avaliar e comunicar impacto social real.',
+    accessTypes: ['open', 'distribution_code'],
+    participants: 203,
+    workloadHours: 14,
+    issuesSbt: true,
+    inPerson: false,
+  },
+]
+
+/** Courses the signed-in member is already enrolled in. */
+export const enrolledCourseIds: readonly string[] = ['economia-simbolica-101']
