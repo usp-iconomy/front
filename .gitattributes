@@ -1,0 +1,17 @@
+# Normalise line endings in the repository; check out LF on every platform.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+
+# Keeps the lockfile out of diffs and out of the language statistics.
+package-lock.json -diff linguist-generated
+
+# The design system is source, not vendored assets.
+src/design-system/** linguist-detectable=true
