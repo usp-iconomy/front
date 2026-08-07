@@ -1,0 +1,125 @@
+/* ── StatBox: centred summary tile ── */
+.statBox {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-align: center;
+}
+
+.statIcon {
+  display: flex;
+  justify-content: center;
+  color: var(--color-accent-strong);
+  margin-bottom: var(--space-3);
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-accent);
+  margin-bottom: var(--space-1);
+}
+
+.statCaption {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+/* ── MetricCard: left-aligned KPI with delta ── */
+.metricCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.metricIcon {
+  color: var(--color-accent-strong);
+  margin-bottom: var(--space-3);
+}
+
+.metricLabel {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.metricDelta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-positive);
+}
+
+/* ── Grids ── */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .statGrid,
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .statBox {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .statValue {
+    font-size: var(--font-size-3xl);
+  }
+
+  .metricCard {
+    padding: var(--space-4);
+  }
+
+  .metricValue {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* 375px phones keep two columns; one column is reserved for the 320px floor. */
+@media (max-width: 360px) {
+  .statGrid,
+  .metricGrid {
+    grid-template-columns: 1fr;
+  }
+}

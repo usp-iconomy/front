@@ -1,0 +1,21 @@
+.amount {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-strong);
+  white-space: nowrap;
+}
+
+.symbol {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.incoming {
+  color: var(--color-positive);
+}
+
+.outgoing {
+  color: var(--color-text);
+}

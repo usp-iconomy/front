@@ -1,0 +1,20 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.positive {
+  color: var(--color-positive);
+}
+
+.neutral {
+  color: var(--color-text-muted);
+}
+
+.negative {
+  color: var(--color-negative);
+}

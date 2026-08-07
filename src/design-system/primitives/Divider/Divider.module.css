@@ -1,0 +1,12 @@
+.divider {
+  height: 1px;
+  border: 0;
+  background: var(--color-border);
+  margin: var(--space-6) 0;
+}
+
+@media (max-width: 768px) {
+  .divider {
+    margin: var(--space-4) 0;
+  }
+}

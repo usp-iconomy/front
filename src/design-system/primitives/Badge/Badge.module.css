@@ -1,0 +1,33 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+}
+
+.open {
+  background: var(--color-open-bg);
+  color: var(--color-open-fg);
+}
+
+.circulation {
+  background: var(--color-circulation-bg);
+  color: var(--color-circulation-fg);
+}
+
+.code {
+  background: var(--color-code-bg);
+  color: var(--color-code-fg);
+}
+
+.sbt {
+  background: var(--color-sbt-bg);
+  color: var(--color-sbt-fg);
+}
