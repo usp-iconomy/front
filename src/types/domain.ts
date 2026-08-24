@@ -78,6 +78,31 @@ export type ActivityRecord = {
   impact: string
 }
 
+/** RF-10 — comunidades que podem receber doação, conforme item 20 da jornada do doador. */
+export type BeneficiaryCommunity = 'quilombola' | 'peripheral' | 'student'
+
+/** RF-10 — um registro de doação, do ponto de vista do doador. */
+export type Donation = {
+  id: string
+  amountReais: number
+  community: BeneficiaryCommunity
+  /** RF-10 item 4: reais convertidos em tokens pela tabela de equivalência. */
+  tokensGenerated: number
+  distributionCodesCount: number
+  createdAt: string
+}
+
+/** RF-11 — o mesmo relatório de ImpactMetric, mas recortado por doação. */
+export type DonorReport = {
+  donationId: string
+  beneficiariesActive: number
+  tokensCirculated: number
+  coursesCompleted: number
+  sbtIssued: number
+  /** RF-08/RF-11 — positiva/negativa/neutra, igual à classificação do feed de circulação. */
+  sentimentSummary: 'positive' | 'negative' | 'neutral'
+}
+
 /** RF-02 — the signed-in member's reputation profile. */
 export type CurrentUser = {
   id: string
