@@ -31,6 +31,7 @@ describe('TokenSettingsPanel', () => {
     await user.click(screen.getByRole('button', { name: /revisar alteração/i }))
 
     expect(screen.getByText(/acima da taxa de Quilombo Ivaporunduva/i)).toBeInTheDocument()
+    expect(decay).toHaveFocus()
     expect(screen.queryByRole('heading', { name: /alterar as taxas padrão/i })).not.toBeInTheDocument()
   })
 
@@ -45,6 +46,7 @@ describe('TokenSettingsPanel', () => {
 
     expect(screen.getByRole('heading', { name: 'Alterar as taxas padrão?' })).toBeInTheDocument()
     expect(screen.getByText(/depois: 12% por semana/i)).toBeInTheDocument()
+    expect(screen.queryByText('Taxas padrão atualizadas.')).toBeNull()
 
     await user.click(screen.getByRole('button', { name: 'Alterar taxas' }))
     expect(screen.getByText('Taxas padrão atualizadas.')).toBeInTheDocument()
@@ -67,5 +69,33 @@ describe('TokenSettingsPanel', () => {
     await user.click(screen.getByRole('button', { name: 'Revisar taxa de Quilombo Kalunga' }))
 
     expect(screen.getByText(/menor que a padrão/i)).toBeInTheDocument()
+    expect(rate).toHaveFocus()
+  })
+
+  it('drops the change when the review is cancelled', async () => {
+    const user = userEvent.setup()
+    renderPanel({ kind: 'usp' })
+
+    const decay = screen.getByLabelText(/decaimento semanal/i)
+    await user.clear(decay)
+    await user.type(decay, '12')
+    await user.click(screen.getByRole('button', { name: /revisar alteração/i }))
+    await user.click(screen.getByRole('button', { name: 'Manter como está' }))
+
+    expect(screen.queryByRole('heading', { name: 'Alterar as taxas padrão?' })).not.toBeInTheDocument()
+    expect(screen.queryByText('Taxas padrão atualizadas.')).toBeNull()
+  })
+
+  it('applies a community rate after the review step', async () => {
+    const user = userEvent.setup()
+    renderPanel({ kind: 'quilombola', communityId: 'kalunga' })
+
+    const rate = screen.getByLabelText('Quilombo Kalunga (% por semana)')
+    await user.clear(rate)
+    await user.type(rate, '3')
+    await user.click(screen.getByRole('button', { name: 'Revisar taxa de Quilombo Kalunga' }))
+    await user.click(screen.getByRole('button', { name: 'Alterar taxa' }))
+
+    expect(screen.getByText('Taxa de Quilombo Kalunga atualizada.')).toBeInTheDocument()
   })
 })

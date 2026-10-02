@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState, type FormEvent } from 'react'
+import { useId, useRef, useState, type FormEvent } from 'react'
 import { Button, ConfirmDialog, Input, SectionHeader, TOKEN_SYMBOL } from '@/design-system'
 import { formatNumber } from '@/lib/format'
 import {
@@ -55,6 +55,9 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
   const [overrideErrors, setOverrideErrors] = useState<Record<string, string>>({})
   const [pending, setPending] = useState<Pending | null>(null)
   const [announcement, setAnnouncement] = useState('')
+  const incrementRef = useRef<HTMLInputElement>(null)
+  const decayRef = useRef<HTMLInputElement>(null)
+  const overrideRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   const communityName = (communityId: string) =>
     communities.find((community) => community.id === communityId)?.name ?? communityId
@@ -66,9 +69,11 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
     const result = validateDefaultRates(draft, overrides, communityName)
     if (!result.ok) {
       setDefaultErrors(result.errors)
+      ;(result.errors.incrementMultiplier ? incrementRef : decayRef).current?.focus()
       return
     }
     setDefaultErrors({})
+    setAnnouncement('')
     setPending({ kind: 'default', value: result.value })
   }
 
@@ -76,6 +81,7 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
     const result = validateOverride(overrideDrafts[communityId] ?? '', settings.weeklyDecayPercent)
     if (!result.ok) {
       setOverrideErrors((current) => ({ ...current, [communityId]: result.error }))
+      overrideRefs.current[communityId]?.focus()
       return
     }
     setOverrideErrors((current) => {
@@ -83,6 +89,7 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
       delete next[communityId]
       return next
     })
+    setAnnouncement('')
     setPending({ kind: 'override', communityId, value: result.value })
   }
 
@@ -120,6 +127,7 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
             </label>
             <Input
               id={`${id}-increment`}
+              ref={incrementRef}
               inputMode="decimal"
               value={draft.incrementMultiplier}
               aria-invalid={Boolean(defaultErrors.incrementMultiplier)}
@@ -140,6 +148,7 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
             </label>
             <Input
               id={`${id}-decay`}
+              ref={decayRef}
               inputMode="decimal"
               value={draft.weeklyDecayPercent}
               aria-invalid={Boolean(defaultErrors.weeklyDecayPercent)}
@@ -180,6 +189,9 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
               <div className={styles.inline}>
                 <Input
                   id={inputId}
+                  ref={(node) => {
+                    overrideRefs.current[override.communityId] = node
+                  }}
                   inputMode="decimal"
                   className={styles.narrow}
                   value={overrideDrafts[override.communityId] ?? ''}
