@@ -1,4 +1,4 @@
-import type { CurrentUser, SoulToken, Transaction } from '@/types/domain'
+import type { CurrentUser, Member, SoulToken, Transaction, WalletSummary } from '@/types/domain'
 
 /** Same person as currentAdmin in mocks/admin.ts: one session, two interfaces. */
 export const currentUser: CurrentUser = {
@@ -10,6 +10,22 @@ export const currentUser: CurrentUser = {
   soulTokenCount: 3,
   reputationStars: 5,
   reputationLabel: 'Muito ativo',
+}
+
+export const demoMember: Member = {
+  id: currentUser.id,
+  name: currentUser.name,
+  email: 'helena.prado@usp.br',
+  role: currentUser.role,
+  isInstitutional: true,
+}
+
+export const demoWallet: WalletSummary = {
+  tokenBalance: currentUser.tokenBalance,
+  circulationCount: currentUser.circulationCount,
+  soulTokenCount: currentUser.soulTokenCount,
+  reputationStars: currentUser.reputationStars,
+  reputationLabel: currentUser.reputationLabel,
 }
 
 export const transactions: readonly Transaction[] = [
