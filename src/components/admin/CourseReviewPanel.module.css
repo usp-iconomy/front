@@ -38,8 +38,9 @@
 
 .note {
   margin-top: var(--space-1);
-  padding-left: var(--space-3);
-  border-left: 3px solid var(--color-border-accent);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
   color: var(--color-text-muted);
 }
 

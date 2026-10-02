@@ -18,6 +18,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - O avatar no topo abre o menu da conta, com "Meu perfil" e, para quem administra, "Administração". No backoffice, a identidade no rodapé do menu lateral abre o mesmo menu com "Plataforma", no lugar do link "Voltar ao site". Quem tem os dois perfis troca de interface sem trocar de pessoa.
+- Comentários no histórico de revisão de curso aparecem num bloco neutro, sem a borda lateral colorida.
 
 ### Fixed
 
