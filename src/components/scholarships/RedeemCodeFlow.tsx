@@ -2,10 +2,9 @@
 
 import { useId, useState, type FormEvent } from 'react'
 import { Button, CodeInput, FlowStep } from '@/design-system'
+import { CODE_LENGTH } from '@/lib/distribution-codes'
 import styles from './RedeemCodeFlow.module.css'
 
-/** RF-09 — Distribution Codes are fixed-length identifiers issued in the Explorer. */
-const CODE_LENGTH = 8
 const TOKENS_PER_REDEMPTION = 200
 
 type Result = { kind: 'success' | 'error'; message: string }

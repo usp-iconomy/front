@@ -1,8 +1,9 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import type { ComponentProps, TextareaHTMLAttributes } from 'react'
 import { Icon } from '../Icon/Icon'
 import styles from './Field.module.css'
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement>
+/** ComponentProps, not InputHTMLAttributes, so React 19 `ref` passes through. */
+export type InputProps = ComponentProps<'input'>
 
 export function Input({ className, ...props }: InputProps) {
   return <input className={[styles.control, className].filter(Boolean).join(' ')} {...props} />

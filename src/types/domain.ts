@@ -115,3 +115,132 @@ export type CurrentUser = {
   reputationStars: 1 | 2 | 3 | 4 | 5
   reputationLabel: string
 }
+
+/** RF-13, RF-14 — which Explorer profile an administrator operates. */
+export type AdminScope = { kind: 'usp' } | { kind: 'quilombola'; communityId: string }
+
+export type AdminUser = {
+  id: string
+  name: string
+  email: string
+  scope: AdminScope
+}
+
+/** RF-06, RF-15 — the Explorer's automatic classification of a transfer message. */
+export type MessageSentiment = 'positive' | 'neutral' | 'negative'
+
+/** RF-15 — one member as Community Analysis sees them in a period. */
+export type MemberCirculation = {
+  memberId: string
+  name: string
+  balance: number
+  /** RN-03 — tokens sent in the period, not tokens held. */
+  sent: number
+}
+
+export type CourseCirculation = {
+  courseId: string
+  title: string
+  tokensCirculated: number
+}
+
+/** RF-15 — Explorer → Community Analysis for one period. */
+export type CommunityAnalysis = {
+  periodStart: string
+  periodEnd: string
+  tokensCirculated: number
+  totalSupply: number
+  sentimentCounts: Record<MessageSentiment, number>
+  members: readonly MemberCirculation[]
+  courses: readonly CourseCirculation[]
+}
+
+/** Course approval. Not in the technical documentation; see admin spec D5. */
+export type CourseReviewStatus = 'pending_review' | 'changes_requested' | 'published' | 'rejected'
+
+export type CourseReviewEvent = {
+  status: CourseReviewStatus
+  at: string
+  actorName: string
+  /** Required when the status is changes_requested or rejected. */
+  note?: string
+}
+
+export type CourseSubmission = {
+  course: Course
+  submittedBy: string
+  status: CourseReviewStatus
+  /** Oldest first. The first entry is the submission itself. */
+  history: readonly CourseReviewEvent[]
+}
+
+export type ReviewDecision =
+  | { kind: 'approve' }
+  | { kind: 'request_changes'; note: string }
+  | { kind: 'reject'; note: string }
+
+/** RF-09 — a scholarship code as configured in the Explorer. */
+export type DistributionCode = {
+  code: string
+  name: string
+  tokensPerRedemption: number
+  maxRedemptions: number
+  redemptionsUsed: number
+  /** UTC instants. Both ends are inclusive. */
+  validFrom: string
+  validUntil: string
+  courseId?: string
+}
+
+/** RN-06 — derived from dates and usage, never stored. */
+export type DistributionCodeStatus = 'scheduled' | 'active' | 'exhausted' | 'expired'
+
+/** RF-13 — a quilombola community registered in the Explorer. */
+export type QuilombolaCommunity = {
+  id: string
+  name: string
+  territory: string
+  members: number
+  /** RN-09 — set by the community's administrator. USP sees detail only when true. */
+  dataSharingConsent: boolean
+}
+
+/** RF-12, RF-13 — an in-person activity whose participants received an SBT. */
+export type TerritorialEvent = {
+  id: string
+  communityId: string
+  name: string
+  activityType: string
+  occurredAt: string
+  organizer: string
+  /** Place inside the territory, used for participation by territory. */
+  locality: string
+  coordinates: { lat: number; lng: number }
+  participants: readonly { memberId: string; name: string }[]
+}
+
+/** RF-07 — ARIGATO CREATION parameters set in the Explorer. */
+export type TokenRateSettings = {
+  /** Scales the documented increment, sent × (sent / balance). 1 = the formula as written (spec D7). */
+  incrementMultiplier: number
+  /** Share of an inactive balance removed each week, 0 to 100. */
+  weeklyDecayPercent: number
+}
+
+/** RN-07 — a quilombola community's own, lower decay rate. */
+export type CommunityRateOverride = {
+  communityId: string
+  weeklyDecayPercent: number
+}
+
+/** RF-14 — a member as the role-management screen sees them. */
+export type ManagedUser = {
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  joinedAt: string
+  tokenBalance: number
+  /** RN-03 — tokens sent in the last 30 days. */
+  sent30d: number
+}
