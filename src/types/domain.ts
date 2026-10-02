@@ -125,3 +125,32 @@ export type AdminUser = {
   email: string
   scope: AdminScope
 }
+
+/** RF-06, RF-15 — the Explorer's automatic classification of a transfer message. */
+export type MessageSentiment = 'positive' | 'neutral' | 'negative'
+
+/** RF-15 — one member as Community Analysis sees them in a period. */
+export type MemberCirculation = {
+  memberId: string
+  name: string
+  balance: number
+  /** RN-03 — tokens sent in the period, not tokens held. */
+  sent: number
+}
+
+export type CourseCirculation = {
+  courseId: string
+  title: string
+  tokensCirculated: number
+}
+
+/** RF-15 — Explorer → Community Analysis for one period. */
+export type CommunityAnalysis = {
+  periodStart: string
+  periodEnd: string
+  tokensCirculated: number
+  totalSupply: number
+  sentimentCounts: Record<MessageSentiment, number>
+  members: readonly MemberCirculation[]
+  courses: readonly CourseCirculation[]
+}

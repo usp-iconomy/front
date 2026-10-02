@@ -40,3 +40,10 @@ export function formatElapsed(utcIso: string, now: number = Date.now()): string 
   const days = Math.floor(elapsed / DAY)
   return days === 1 ? 'há 1 dia' : `há ${days} dias`
 }
+
+const decimalFormat = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+/** Two fixed decimals, for ratios such as circulation velocity. */
+export function formatDecimal(value: number): string {
+  return decimalFormat.format(value)
+}
