@@ -15,6 +15,10 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/admin/users`: busca de usuários por nome ou e-mail (sem precisar de acento), filtro por papel e troca de papel. Ninguém muda o próprio papel, e a última pessoa na administração não perde o papel.
 - Página 404 em português com atalhos para os cursos e para a administração.
 
+### Changed
+
+- O avatar no topo abre o menu da conta, com "Meu perfil" e, para quem administra, "Administração". No backoffice, a identidade no rodapé do menu lateral abre o mesmo menu com "Plataforma", no lugar do link "Voltar ao site". Quem tem os dois perfis troca de interface sem trocar de pessoa.
+
 ### Fixed
 
 - Menu do topo das telas de membro: os itens ficavam encostados na borda de cima do cabeçalho em vez de centralizados, e o sublinhado do item ativo não chegava à borda de baixo.

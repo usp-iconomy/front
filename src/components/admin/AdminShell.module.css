@@ -93,22 +93,6 @@
   margin-top: auto;
 }
 
-.adminName {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-}
-
-.adminScope {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.exitLink {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: var(--font-size-sm);
-}
 
 .main {
   padding: var(--space-9) var(--space-8);
@@ -154,10 +138,6 @@
 
   .identity {
     margin: 0 0 0 auto;
-  }
-
-  .identityText {
-    display: none;
   }
 
   .main {

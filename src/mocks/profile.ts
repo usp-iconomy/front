@@ -1,9 +1,10 @@
 import type { CurrentUser, SoulToken, Transaction } from '@/types/domain'
 
+/** Same person as currentAdmin in mocks/admin.ts: one session, two interfaces. */
 export const currentUser: CurrentUser = {
-  id: 'user-mj',
-  name: 'Maria Joana',
-  role: 'student',
+  id: 'admin-usp-1',
+  name: 'Helena Prado',
+  role: 'admin',
   tokenBalance: 450,
   circulationCount: 18,
   soulTokenCount: 3,
