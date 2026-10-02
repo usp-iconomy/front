@@ -35,6 +35,16 @@ que pega import não usado, variável órfã e erro de tipo.
 | `/achievements` | Galeria de Tokens Alma (SBTs) |
 | `/impact` | Métricas de impacto e SROI |
 | `/design-system` | Catálogo vivo das primitivas |
+| `/admin` | Backoffice: visão geral da comunidade (RF-15) |
+| `/admin/courses` | Aprovação de cursos |
+| `/admin/distribution-codes` | Códigos de distribuição e exportação CSV (RF-09) |
+| `/admin/token-settings` | Taxas de incremento e decaimento (RF-07) |
+| `/admin/users` | Usuários e papéis (RF-14) |
+| `/admin/communities` | Comunidades quilombolas e memória coletiva (RF-13) |
+
+O perfil de administração vem de `currentAdmin` em `src/mocks/admin.ts`. Troque
+para `quilombolaAdmin` para ver o perfil do admin quilombola. O bloqueio de
+seções é só de interface: a API precisa aplicar as mesmas regras.
 
 ## Estrutura
 
