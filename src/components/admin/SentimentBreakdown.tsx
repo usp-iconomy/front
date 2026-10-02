@@ -25,7 +25,7 @@ export function SentimentBreakdown({ shares, counts }: SentimentBreakdownProps) 
             <span className={`${styles.bar} ${styles[key]}`} style={{ width: `${shares[key]}%` }} />
           </span>
           <span className={styles.value}>
-            {shares[key]}% · {formatNumber(counts[key])} mensagens
+            {shares[key]}% · {formatNumber(counts[key])} {counts[key] === 1 ? 'mensagem' : 'mensagens'}
           </span>
         </li>
       ))}
