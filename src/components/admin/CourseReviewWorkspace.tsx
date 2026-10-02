@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Chip, DataTable, StatusText, type Column } from '@/design-system'
 import {
   REVIEW_NOTE_MIN_LENGTH,
@@ -45,9 +45,23 @@ export function CourseReviewWorkspace({ initialSubmissions, reviewerName }: Cour
   const [filter, setFilter] = useState<CourseReviewStatus>('pending_review')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [announcement, setAnnouncement] = useState('')
+  const [returnFocus, setReturnFocus] = useState<{ courseId: string | null } | null>(null)
+  const rowButtons = useRef(new Map<string, HTMLButtonElement>())
+  const filterGroup = useRef<HTMLDivElement>(null)
 
   const queue = reviewQueue(submissions, filter)
   const selected = submissions.find((submission) => submission.course.id === selectedId) ?? null
+
+  useEffect(() => {
+    if (returnFocus === null) return
+    const row = returnFocus.courseId === null ? undefined : rowButtons.current.get(returnFocus.courseId)
+    ;(row ?? filterGroup.current)?.focus()
+  }, [returnFocus])
+
+  function closePanel() {
+    setReturnFocus({ courseId: selectedId })
+    setSelectedId(null)
+  }
 
   function handleDecide(decision: ReviewDecision): string | null {
     if (!selected) return null
@@ -60,6 +74,9 @@ export function CourseReviewWorkspace({ initialSubmissions, reviewerName }: Cour
     setSubmissions((current) =>
       current.map((submission) => (submission.course.id === selected.course.id ? result.submission : submission)),
     )
+    const index = queue.findIndex((submission) => submission.course.id === selected.course.id)
+    const next = queue[index + 1] ?? queue[index - 1]
+    setReturnFocus({ courseId: next ? next.course.id : null })
     setSelectedId(null)
     setAnnouncement(announcementFor(selected.course.title, result.submission.status))
     return null
@@ -72,6 +89,10 @@ export function CourseReviewWorkspace({ initialSubmissions, reviewerName }: Cour
       render: (row) => (
         <button
           type="button"
+          ref={(node) => {
+            if (node) rowButtons.current.set(row.course.id, node)
+            else rowButtons.current.delete(row.course.id)
+          }}
           className={styles.rowButton}
           aria-current={row.course.id === selectedId ? 'true' : undefined}
           onClick={() => setSelectedId(row.course.id)}
@@ -102,7 +123,7 @@ export function CourseReviewWorkspace({ initialSubmissions, reviewerName }: Cour
 
   return (
     <div>
-      <div className={styles.filters} role="group" aria-label="Filtrar por status">
+      <div ref={filterGroup} tabIndex={-1} className={styles.filters} role="group" aria-label="Filtrar por status">
         {reviewStatuses.map((status) => (
           <Chip
             key={status}
@@ -138,7 +159,7 @@ export function CourseReviewWorkspace({ initialSubmissions, reviewerName }: Cour
             key={selected.course.id}
             submission={selected}
             onDecide={handleDecide}
-            onClose={() => setSelectedId(null)}
+            onClose={closePanel}
           />
         )}
       </div>

@@ -91,4 +91,34 @@ describe('CourseReviewWorkspace', () => {
 
     expect(screen.getByText(/nenhum curso rejeitado/i)).toBeInTheDocument()
   })
+
+  it('returns focus to the course row after Fechar', async () => {
+    const user = userEvent.setup()
+    render(<CourseReviewWorkspace initialSubmissions={submissions} reviewerName="Helena Prado" />)
+
+    await user.click(screen.getByRole('button', { name: 'Cartografia Social' }))
+    await user.click(screen.getByRole('button', { name: 'Fechar' }))
+
+    expect(screen.getByRole('button', { name: 'Cartografia Social' })).toHaveFocus()
+  })
+
+  it('moves focus to the remaining course after a decision', async () => {
+    const user = userEvent.setup()
+    render(<CourseReviewWorkspace initialSubmissions={submissions} reviewerName="Helena Prado" />)
+
+    await user.click(screen.getByRole('button', { name: 'Cartografia Social' }))
+    await user.click(screen.getByRole('button', { name: 'Publicar curso' }))
+
+    expect(screen.getByRole('button', { name: 'Agroecologia Urbana' })).toHaveFocus()
+  })
+
+  it('moves focus to the filters when the queue empties', async () => {
+    const user = userEvent.setup()
+    render(<CourseReviewWorkspace initialSubmissions={submissions.slice(1)} reviewerName="Helena Prado" />)
+
+    await user.click(screen.getByRole('button', { name: 'Cartografia Social' }))
+    await user.click(screen.getByRole('button', { name: 'Publicar curso' }))
+
+    expect(screen.getByRole('group', { name: 'Filtrar por status' })).toHaveFocus()
+  })
 })
