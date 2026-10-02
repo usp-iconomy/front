@@ -14,7 +14,8 @@ function parseSetCookie(setCookie: string, nowMs: number): CookieUpdate | null {
     const [key = '', ...rest] = attribute.split('=')
     const attributeValue = rest.join('=').trim()
     const normalized = key.trim().toLowerCase()
-    if (normalized === 'max-age' && Number(attributeValue) <= 0) removed = true
+    // RFC 6265 5.2.2: a Max-Age that is not an optional '-' plus digits is ignored.
+    if (normalized === 'max-age' && /^-?\d+$/.test(attributeValue) && Number(attributeValue) <= 0) removed = true
     if (normalized === 'expires' && Date.parse(attributeValue) <= nowMs) removed = true
   }
   return { name, value, removed }

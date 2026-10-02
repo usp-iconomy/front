@@ -38,6 +38,15 @@ describe('mergeSetCookiesIntoCookieHeader', () => {
     ).toBe('authjs.session-token.0=new0')
   })
 
+  it('ignores an empty or malformed Max-Age, as RFC 6265 does', () => {
+    expect(
+      merge('authjs.session-token.0=old0; authjs.session-token.1=old1', [
+        'authjs.session-token.0=new0; Path=/; Max-Age=',
+        'authjs.session-token.1=new1; Path=/; Max-Age=soon',
+      ]),
+    ).toBe('authjs.session-token.0=new0; authjs.session-token.1=new1')
+  })
+
   it('switches from one cookie to chunks when the session grows', () => {
     expect(
       merge('authjs.session-token=small', [
