@@ -1,0 +1,62 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.announcement {
+  min-height: 1.5em;
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-positive);
+}
+
+/* Master-detail: the queue stays visible while one course is open. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  align-items: start;
+  gap: var(--space-6);
+}
+
+.split > :last-child {
+  position: sticky;
+  top: var(--space-6);
+}
+
+.empty {
+  color: var(--color-text-muted);
+}
+
+.rowButton {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent-strong);
+  font-weight: var(--font-weight-semibold);
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.rowButton:hover {
+  color: var(--color-accent-hover);
+}
+
+.rowButton[aria-current='true'] {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .split > :last-child {
+    position: static;
+  }
+}
