@@ -1,16 +1,12 @@
-import type { IconName } from '@/design-system'
 import type { ActivityRecord, ImpactMetric } from '@/types/domain'
 
-/** The icon is presentation, not domain data, so it is attached here. */
-export type ImpactMetricView = ImpactMetric & { icon: IconName }
-
-export const impactMetrics: readonly ImpactMetricView[] = [
-  { id: 'participants', icon: 'users', label: 'Participantes ativos', value: '1.247', delta: '+12% este mês' },
-  { id: 'circulating', icon: 'arrows', label: 'Tokens circulando', value: '48.500', delta: '+8,5% de fluxo' },
-  { id: 'sbts', icon: 'doc', label: 'Tokens Alma emitidos', value: '3.892', delta: '+24% de crescimento' },
-  { id: 'courses', icon: 'school', label: 'Cursos oferecidos', value: '42', delta: '+6 novos' },
-  { id: 'communities', icon: 'globe', label: 'Comunidades beneficiadas', value: '18', delta: '+3 esta semana' },
-  { id: 'sroi', icon: 'trendUp', label: 'SROI estimado', value: '4,2×', delta: 'por real investido' },
+export const impactMetrics: readonly ImpactMetric[] = [
+  { id: 'participants', label: 'Participantes ativos', value: '1.247', delta: '+12% este mês' },
+  { id: 'circulating', label: 'Tokens circulando', value: '48.500', delta: '+8,5% de fluxo' },
+  { id: 'sbts', label: 'Tokens Alma emitidos', value: '3.892', delta: '+24% de crescimento' },
+  { id: 'courses', label: 'Cursos oferecidos', value: '42', delta: '+6 novos' },
+  { id: 'communities', label: 'Comunidades beneficiadas', value: '18', delta: '+3 esta semana' },
+  { id: 'sroi', label: 'SROI estimado', value: '4,2×', delta: 'por real investido' },
 ]
 
 export const activityRecords: readonly ActivityRecord[] = [

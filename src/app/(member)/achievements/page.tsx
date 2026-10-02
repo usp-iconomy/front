@@ -1,33 +1,11 @@
 import type { Metadata } from 'next'
-import { Divider, InfoBox, PageHeader } from '@/design-system'
-import { SoulTokenCard, SoulTokenGrid } from '@/components/achievements/SoulTokenCard'
-import { soulTokens } from '@/mocks/profile'
+import { demoSource } from '@/data/demo/source'
+import { AchievementsScreen } from '@/screens/AchievementsScreen'
 
 export const metadata: Metadata = { title: 'Meus Tokens Alma — USP Iconomy' }
 
-export default function AchievementsPage() {
-  return (
-    <>
-      <PageHeader
-        title="Meus Tokens Alma"
-        description="Certificados não-transferíveis que registram sua participação real na comunidade."
-      />
-
-      <SoulTokenGrid>
-        {soulTokens.map((token) => (
-          <SoulTokenCard key={token.id} token={token} />
-        ))}
-      </SoulTokenGrid>
-
-      <Divider />
-
-      <InfoBox title="O que são Tokens Alma?" icon="shield">
-        São certificados digitais que ficam permanentemente ligados à sua carteira. Diferente dos tokens UAIFAI,
-        que circulam, um Token Alma não pode ser vendido, transferido ou delegado. Ele prova participação — em um
-        curso, em uma oficina, em uma assembleia — e, quando a atividade é presencial, registra também o local e a
-        data. Para comunidades quilombolas, isso constitui um registro de pertença territorial que não depende de
-        cadastro administrativo.
-      </InfoBox>
-    </>
-  )
+export default async function AchievementsPage() {
+  const soulTokens = await demoSource.listSoulTokens()
+  if (soulTokens.status !== 'ok') throw new Error('demo source always answers')
+  return <AchievementsScreen soulTokens={soulTokens.data} />
 }

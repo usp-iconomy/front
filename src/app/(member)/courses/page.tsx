@@ -1,18 +1,11 @@
 import type { Metadata } from 'next'
-import { PageHeader } from '@/design-system'
-import { CourseCatalog } from '@/components/courses/CourseCatalog'
-import { courses, enrolledCourseIds } from '@/mocks/courses'
+import { demoSource } from '@/data/demo/source'
+import { CoursesScreen } from '@/screens/CoursesScreen'
 
 export const metadata: Metadata = { title: 'Descobrir cursos — USP Iconomy' }
 
-export default function CoursesPage() {
-  return (
-    <>
-      <PageHeader
-        title="Descobrir cursos"
-        description="Conhecimento que circula, transforma. Explore cursos, reconheça contribuições e construa sua trajetória coletiva."
-      />
-      <CourseCatalog courses={courses} initialEnrolledIds={enrolledCourseIds} />
-    </>
-  )
+export default async function CoursesPage() {
+  const courses = await demoSource.listCourses()
+  if (courses.status !== 'ok') throw new Error('demo source always answers')
+  return <CoursesScreen data={courses.data} />
 }
