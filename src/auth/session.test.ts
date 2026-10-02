@@ -20,6 +20,7 @@ function setRequest(cookie: string, forwardedProto?: string) {
 beforeEach(() => {
   vi.stubEnv('AUTH_SECRET', secret)
   vi.stubEnv('AUTH_URL', undefined)
+  vi.stubEnv('NEXTAUTH_URL', undefined)
   vi.stubEnv('NODE_ENV', 'production')
 })
 
@@ -47,6 +48,13 @@ describe('getAccessToken', () => {
     setRequest(await sessionCookie('authjs.session-token'))
 
     expect(await getAccessToken()).toBeNull()
+  })
+
+  it('falls back to NEXTAUTH_URL when AUTH_URL is unset, as Auth.js does', async () => {
+    vi.stubEnv('NEXTAUTH_URL', 'https://iconomy.example')
+    setRequest(await sessionCookie('__Secure-authjs.session-token'), 'http')
+
+    expect(await getAccessToken()).toBe('access-1')
   })
 
   it('follows x-forwarded-proto when AUTH_URL is unset', async () => {
