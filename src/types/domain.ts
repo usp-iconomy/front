@@ -115,3 +115,13 @@ export type CurrentUser = {
   reputationStars: 1 | 2 | 3 | 4 | 5
   reputationLabel: string
 }
+
+/** RF-13, RF-14 — which Explorer profile an administrator operates. */
+export type AdminScope = { kind: 'usp' } | { kind: 'quilombola'; communityId: string }
+
+export type AdminUser = {
+  id: string
+  name: string
+  email: string
+  scope: AdminScope
+}
