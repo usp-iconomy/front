@@ -24,7 +24,7 @@ export const authConfig = {
     }),
   ],
   session: { strategy: 'jwt' },
-  pages: { signIn: '/' },
+  pages: { signIn: '/', error: '/' },
   callbacks: {
     authorized({ auth: session, request }) {
       if (isPublicPath(request.nextUrl.pathname)) return true

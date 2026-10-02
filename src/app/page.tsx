@@ -8,7 +8,7 @@ type HomePageProps = {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const [session, { reason, callbackUrl }] = await Promise.all([auth(), searchParams])
+  const [session, { reason, callbackUrl, error }] = await Promise.all([auth(), searchParams])
   const sessionExpired = reason === 'session-expired'
   // A session that failed to refresh, or that the API rejected with 401, must not offer "Continuar como": it would loop back here.
   const signedIn = Boolean(session?.user) && !session?.error && !sessionExpired
@@ -19,6 +19,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     <EntryScreen
       member={member}
       sessionExpired={sessionExpired}
+      signInFailed={error !== undefined}
       next={nextFromCallbackUrl(callbackUrl, appOrigin)}
       actions={{ signIn: signInAction, signUp: signUpAction, signOut: signOutAction }}
     />

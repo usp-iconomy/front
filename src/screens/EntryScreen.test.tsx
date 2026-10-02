@@ -5,7 +5,7 @@ import { EntryScreen, type EntryScreenProps } from './EntryScreen'
 const actions = { signIn: vi.fn(), signUp: vi.fn(), signOut: vi.fn() }
 
 function renderEntry(props: Partial<EntryScreenProps> = {}) {
-  return render(<EntryScreen member={null} sessionExpired={false} next="/courses" actions={actions} {...props} />)
+  return render(<EntryScreen member={null} sessionExpired={false} signInFailed={false} next="/courses" actions={actions} {...props} />)
 }
 
 describe('EntryScreen', () => {
@@ -47,6 +47,12 @@ describe('EntryScreen', () => {
   it('announces an expired session above the sign-in', () => {
     renderEntry({ sessionExpired: true })
     expect(screen.getByRole('status')).toHaveTextContent('Sua sessão expirou. Entre de novo para continuar.')
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
+  })
+
+  it('says a failed sign-in can be tried again', () => {
+    renderEntry({ signInFailed: true })
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível entrar. Tente de novo.')
     expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
   })
 

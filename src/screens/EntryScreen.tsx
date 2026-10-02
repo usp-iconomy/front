@@ -7,6 +7,8 @@ export type EntryScreenProps = {
   /** Null when nobody is signed in. The name can be missing for a signed-in account. */
   member: { name: string | null } | null
   sessionExpired: boolean
+  /** Auth.js came back with an error (Keycloak down, a cancelled or tampered sign-in). */
+  signInFailed: boolean
   /** In-app path to land on after signing in. */
   next: string
   actions: {
@@ -18,7 +20,7 @@ export type EntryScreenProps = {
 
 const DEMO_HELPER_ID = 'entry-demo-helper'
 
-export function EntryScreen({ member, sessionExpired, next, actions }: EntryScreenProps) {
+export function EntryScreen({ member, sessionExpired, signInFailed, next, actions }: EntryScreenProps) {
   return (
     <main className={styles.page}>
       <div className={styles.column}>
@@ -30,6 +32,12 @@ export function EntryScreen({ member, sessionExpired, next, actions }: EntryScre
         {sessionExpired && (
           <p role="status" className={styles.notice}>
             Sua sessão expirou. Entre de novo para continuar.
+          </p>
+        )}
+
+        {signInFailed && (
+          <p role="status" className={styles.notice}>
+            Não foi possível entrar. Tente de novo.
           </p>
         )}
 

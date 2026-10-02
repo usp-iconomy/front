@@ -61,6 +61,12 @@ describe('entry page', () => {
     expect(screen.queryByRole('link', { name: /Continuar como/ })).not.toBeInTheDocument()
   })
 
+  it('says the sign-in failed when Auth.js sends back an error', async () => {
+    await renderHome({ error: 'Configuration' })
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível entrar. Tente de novo.')
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
+  })
+
   it('takes the destination from an absolute callbackUrl on the app origin', async () => {
     await renderHome({ callbackUrl: 'http://localhost:3000/admin/users?tab=roles' })
     expect(nextValue()).toBe('/admin/users?tab=roles')

@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import { authConfig } from './config'
 
+describe('authConfig.pages', () => {
+  it('sends sign-in and Auth.js errors to the entry page', () => {
+    expect(authConfig.pages).toEqual({ signIn: '/', error: '/' })
+  })
+})
+
 describe('authConfig.callbacks.session', () => {
   it('serves identity only, never a token, from a JWT that carries all of them', async () => {
     const token = {
