@@ -79,6 +79,36 @@ describe('AccountMenu', () => {
     await waitFor(() => expect(signOut).toHaveBeenCalledTimes(1))
   })
 
+  it('keeps the menu mounted on "Sair" so the form is still attached when it submits', async () => {
+    const user = userEvent.setup()
+    render(<AccountMenu name="Maria Joana" roleLabel="Estudante" signOut={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Maria Joana' }))
+    const item = screen.getByRole('menuitem', { name: 'Sair' })
+    await user.click(item)
+
+    expect(item).toBeInTheDocument()
+    expect(item.isConnected).toBe(true)
+  })
+
+  it('draws no separator above the exit item when nothing else is listed', async () => {
+    const user = userEvent.setup()
+    render(<AccountMenu name="Maria Joana" roleLabel="Estudante" signOut={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Maria Joana' }))
+
+    expect(screen.queryByRole('separator')).not.toBeInTheDocument()
+  })
+
+  it('separates the exit item from the links above it', async () => {
+    const user = userEvent.setup()
+    render(<AccountMenu name="Maria Joana" roleLabel="Estudante" links={[toAdmin]} signOut={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Maria Joana' }))
+
+    expect(screen.getAllByRole('separator')).toHaveLength(1)
+  })
+
   it('leaves the demonstration through a link to the entry page', async () => {
     const user = userEvent.setup()
     render(<AccountMenu name="Maria Joana" roleLabel="Estudante" exitDemoHref="/" />)

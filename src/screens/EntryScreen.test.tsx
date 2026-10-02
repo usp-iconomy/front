@@ -5,7 +5,7 @@ import { EntryScreen, type EntryScreenProps } from './EntryScreen'
 const actions = { signIn: vi.fn(), signUp: vi.fn(), signOut: vi.fn() }
 
 function renderEntry(props: Partial<EntryScreenProps> = {}) {
-  return render(<EntryScreen memberName={null} sessionExpired={false} next="/courses" actions={actions} {...props} />)
+  return render(<EntryScreen member={null} sessionExpired={false} next="/courses" actions={actions} {...props} />)
 }
 
 describe('EntryScreen', () => {
@@ -52,13 +52,21 @@ describe('EntryScreen', () => {
 
   describe('signed in', () => {
     it('continues as the member and offers Sair, keeping the demonstration', () => {
-      renderEntry({ memberName: 'Maria Joana' })
+      renderEntry({ member: { name: 'Maria Joana' } })
 
       expect(screen.getByRole('link', { name: 'Continuar como Maria Joana' })).toHaveAttribute('href', '/courses')
       expect(within(screen.getByRole('button', { name: 'Sair' }).closest('form')!).getByRole('button')).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Explorar demonstração' })).toHaveAttribute('href', '/demo/courses')
       expect(screen.queryByRole('button', { name: 'Entrar' })).not.toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Criar conta' })).not.toBeInTheDocument()
+    })
+
+    it('still counts someone without a name as signed in', () => {
+      renderEntry({ member: { name: null } })
+
+      expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute('href', '/courses')
+      expect(screen.getByRole('button', { name: 'Sair' })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Entrar' })).not.toBeInTheDocument()
     })
   })
 })

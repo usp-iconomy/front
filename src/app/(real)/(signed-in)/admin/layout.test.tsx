@@ -6,6 +6,7 @@ import AdminLayout from './layout'
 const mocks = vi.hoisted(() => ({ getAdmin: vi.fn() }))
 vi.mock('@/data/api/source', () => ({ createApiSource: () => ({ getAdmin: mocks.getAdmin }) }))
 vi.mock('next/navigation', () => ({ usePathname: () => '/admin' }))
+vi.mock('@/auth/actions', () => ({ signOutAction: vi.fn() }))
 
 async function renderLayout() {
   render(await AdminLayout({ children: <p>Conteúdo administrativo</p> }))

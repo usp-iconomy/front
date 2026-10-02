@@ -33,6 +33,19 @@ describe('entry page', () => {
     expect(screen.getByRole('link', { name: 'Continuar como Maria Joana' })).toBeInTheDocument()
   })
 
+  it('keeps a session with neither name nor email signed in', async () => {
+    session.current = { user: {} }
+    await renderHome()
+    expect(screen.getByRole('link', { name: 'Continuar' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Entrar' })).not.toBeInTheDocument()
+  })
+
+  it('falls back to /courses instead of throwing on a malformed AUTH_URL', async () => {
+    vi.stubEnv('AUTH_URL', 'localhost:3000')
+    await renderHome({ callbackUrl: 'http://localhost:3000/admin' })
+    expect(nextValue()).toBe('/courses')
+  })
+
   it('treats a failed refresh as signed out', async () => {
     session.current = { user: { name: 'Maria Joana' }, error: 'RefreshFailed' }
     await renderHome({ reason: 'session-expired' })

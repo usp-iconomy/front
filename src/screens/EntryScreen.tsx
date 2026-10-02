@@ -4,8 +4,8 @@ import { pathFor } from '@/lib/mode'
 import styles from './EntryScreen.module.css'
 
 export type EntryScreenProps = {
-  /** Null when nobody is signed in. */
-  memberName: string | null
+  /** Null when nobody is signed in. The name can be missing for a signed-in account. */
+  member: { name: string | null } | null
   sessionExpired: boolean
   /** In-app path to land on after signing in. */
   next: string
@@ -18,7 +18,7 @@ export type EntryScreenProps = {
 
 const DEMO_HELPER_ID = 'entry-demo-helper'
 
-export function EntryScreen({ memberName, sessionExpired, next, actions }: EntryScreenProps) {
+export function EntryScreen({ member, sessionExpired, next, actions }: EntryScreenProps) {
   return (
     <main className={styles.page}>
       <div className={styles.column}>
@@ -33,7 +33,7 @@ export function EntryScreen({ memberName, sessionExpired, next, actions }: Entry
           </p>
         )}
 
-        {memberName === null ? (
+        {member === null ? (
           <div className={styles.actions}>
             <form action={actions.signIn}>
               <input type="hidden" name="next" value={next} />
@@ -49,8 +49,8 @@ export function EntryScreen({ memberName, sessionExpired, next, actions }: Entry
           </div>
         ) : (
           <div className={styles.actions}>
-            <Link href="/courses" className={styles.continueLink}>
-              Continuar como {memberName}
+            <Link href={pathFor('real', '/courses')} className={styles.continueLink}>
+              {member.name ? `Continuar como ${member.name}` : 'Continuar'}
             </Link>
             <form action={actions.signOut}>
               <Button type="submit" variant="ghost" fullWidth>

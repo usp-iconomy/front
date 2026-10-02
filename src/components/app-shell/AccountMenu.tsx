@@ -91,10 +91,11 @@ export function AccountMenu({
           <Destination destination={switchTo} />
         </>
       )}
-      {(signOut || exitDemoHref) && <MenuSeparator />}
+      {(signOut || exitDemoHref) && (links.length > 0 || switchTo) && <MenuSeparator />}
       {signOut && (
         <form action={signOut}>
-          <MenuItem>
+          {/* The form lives inside the menu: closing it on select would detach the form before it submits. */}
+          <MenuItem onSelect={(event) => event.preventDefault()}>
             <button type="submit" className={styles.exitButton}>
               <span className={styles.itemLabel}>Sair</span>
             </button>

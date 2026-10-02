@@ -90,4 +90,8 @@ describe('nextFromCallbackUrl', () => {
   ])('falls back to /courses for %j', (callbackUrl) => {
     expect(nextFromCallbackUrl(callbackUrl, origin)).toBe('/courses')
   })
+
+  it.each(['', 'localhost:3000', 'not a url'])('falls back to /courses when the app origin %j is malformed', (appOrigin) => {
+    expect(nextFromCallbackUrl('http://localhost:3000/admin', appOrigin)).toBe('/courses')
+  })
 })

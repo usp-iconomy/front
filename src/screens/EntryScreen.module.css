@@ -32,8 +32,8 @@
 .notice {
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--color-code-bg);
-  color: var(--color-code-fg);
+  background: var(--color-accent-soft);
+  color: var(--color-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
 }

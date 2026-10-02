@@ -6,6 +6,7 @@ import { AdminShell } from './AdminShell'
 
 const navigation = vi.hoisted(() => ({ pathname: '/admin' }))
 vi.mock('next/navigation', () => ({ usePathname: () => navigation.pathname }))
+vi.mock('@/auth/actions', () => ({ signOutAction: vi.fn() }))
 
 const usp: AdminUser = { id: 'a1', name: 'Helena Prado', email: 'helena.prado@usp.br', scope: { kind: 'usp' } }
 const kalunga: AdminUser = {
@@ -123,5 +124,27 @@ describe('AdminShell', () => {
       await user.click(screen.getByRole('button', { name: 'Menu da conta: Helena Prado' }))
       expect(screen.getByRole('menuitem', { name: /Plataforma/ })).toHaveAttribute('href', '/demo/courses')
     })
+  })
+
+  it('ends the session from the account menu in the real admin', async () => {
+    navigation.pathname = '/admin'
+    const user = userEvent.setup()
+    render(<AdminShell admin={usp}>conteúdo</AdminShell>)
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Helena Prado' }))
+
+    expect(screen.getByRole('menuitem', { name: 'Sair' })).toHaveAttribute('type', 'submit')
+    expect(screen.queryByRole('menuitem', { name: 'Sair da demonstração' })).not.toBeInTheDocument()
+  })
+
+  it('leaves the demonstration to the entry page from the demo admin', async () => {
+    navigation.pathname = '/demo/admin'
+    const user = userEvent.setup()
+    render(<AdminShell admin={usp}>conteúdo</AdminShell>)
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Helena Prado' }))
+
+    expect(screen.getByRole('menuitem', { name: 'Sair da demonstração' })).toHaveAttribute('href', '/')
+    expect(screen.queryByRole('menuitem', { name: 'Sair' })).not.toBeInTheDocument()
   })
 })

@@ -29,9 +29,16 @@ export function Menu({ trigger, header, side = 'bottom', align = 'end', children
 }
 
 /** Turns a link or button into a keyboard-navigable menu item. */
-export function MenuItem({ children }: { children: ReactElement }) {
+export function MenuItem({
+  children,
+  onSelect,
+}: {
+  children: ReactElement
+  /** Calling `event.preventDefault()` keeps the menu open after the item is chosen. */
+  onSelect?: (event: Event) => void
+}) {
   return (
-    <DropdownMenu.Item asChild className={styles.item}>
+    <DropdownMenu.Item asChild className={styles.item} onSelect={onSelect}>
       {children}
     </DropdownMenu.Item>
   )

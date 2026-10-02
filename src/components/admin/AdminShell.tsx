@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { Icon } from '@/design-system'
 import { adminEntryFor, adminNavFor, canAccessAdminPath, sectionForPath } from '@/lib/admin-access'
+import { signOutAction } from '@/auth/actions'
 import { modeFromPath, pathFor, stripMode } from '@/lib/mode'
 import type { AdminUser } from '@/types/domain'
 import { AccountMenu } from '../app-shell/AccountMenu'
@@ -61,6 +62,8 @@ export function AdminShell({ admin, children }: AdminShellProps) {
             showIdentity
             side="top"
             align="start"
+            signOut={mode === 'real' ? signOutAction : undefined}
+            exitDemoHref={mode === 'demo' ? '/' : undefined}
             switchTo={{
               href: pathFor(mode, '/courses'),
               label: 'Plataforma',
