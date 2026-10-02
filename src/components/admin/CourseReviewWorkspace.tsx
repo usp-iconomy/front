@@ -17,9 +17,10 @@ import styles from './CourseReviewWorkspace.module.css'
 
 const emptyQueue: Record<CourseReviewStatus, string> = {
   pending_review: 'Nenhum curso esperando revisão. Cursos enviados por docentes aparecem aqui.',
-  changes_requested: 'Nenhum curso com ajustes pendentes.',
-  published: 'Nenhum curso publicado por esta fila ainda.',
-  rejected: 'Nenhum curso rejeitado.',
+  changes_requested:
+    'Nenhum curso com ajustes pendentes. Cursos em que você pedir ajustes aparecem aqui com o comentário.',
+  published: 'Nenhum curso publicado ainda. Cursos que você aprovar aparecem aqui.',
+  rejected: 'Nenhum curso rejeitado. Cursos que você rejeitar aparecem aqui com o comentário.',
 }
 
 function announcementFor(title: string, status: CourseReviewStatus): string {

@@ -90,6 +90,7 @@ describe('CourseReviewWorkspace', () => {
     await user.click(screen.getByRole('button', { name: 'Rejeitado (0)' }))
 
     expect(screen.getByText(/nenhum curso rejeitado/i)).toBeInTheDocument()
+    expect(screen.getByText(/cursos que você rejeitar aparecem aqui com o comentário/i)).toBeInTheDocument()
   })
 
   it('returns focus to the course row after Fechar', async () => {
