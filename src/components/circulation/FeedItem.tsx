@@ -22,7 +22,7 @@ export function FeedItem({ entry }: { entry: CirculationEntry }) {
 
         <p className={styles.action}>
           Circulou <TokenAmount value={entry.amount} showUnit />
-          {entry.courseTitle && <span className={styles.course}> · {entry.courseTitle}</span>}
+          {entry.courseTitle && <span className={styles.course}> no curso {entry.courseTitle}</span>}
         </p>
 
         <blockquote className={styles.message}>{entry.message}</blockquote>

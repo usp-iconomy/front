@@ -3,7 +3,7 @@ import { createApiSource } from '@/data/api/source'
 import { AchievementsScreen } from '@/screens/AchievementsScreen'
 import { UnderConstruction } from '@/screens/UnderConstruction'
 
-export const metadata: Metadata = { title: 'Meus Tokens Alma — USP Iconomy' }
+export const metadata: Metadata = { title: 'Meus Tokens Alma | USP Iconomy' }
 
 export default async function AchievementsPage() {
   const soulTokens = await createApiSource().listSoulTokens()

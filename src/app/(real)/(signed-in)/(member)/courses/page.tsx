@@ -3,7 +3,7 @@ import { createApiSource } from '@/data/api/source'
 import { CoursesScreen } from '@/screens/CoursesScreen'
 import { UnderConstruction } from '@/screens/UnderConstruction'
 
-export const metadata: Metadata = { title: 'Descobrir cursos — USP Iconomy' }
+export const metadata: Metadata = { title: 'Descobrir cursos | USP Iconomy' }
 
 export default async function CoursesPage() {
   const courses = await createApiSource().listCourses()

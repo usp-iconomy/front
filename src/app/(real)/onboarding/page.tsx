@@ -6,7 +6,7 @@ import { OnboardingScreen } from '@/screens/OnboardingScreen'
 import { FORBIDDEN, requireMemberStatus } from '../member-status'
 import { chooseRoleAction } from './actions'
 
-export const metadata: Metadata = { title: 'Primeiro acesso — USP Iconomy' }
+export const metadata: Metadata = { title: 'Primeiro acesso | USP Iconomy' }
 
 export default async function OnboardingPage() {
   const status = await requireMemberStatus()

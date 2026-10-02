@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { demoSource } from '@/data/demo/source'
 import { AdminDistributionCodesScreen } from '@/screens/AdminDistributionCodesScreen'
 
-export const metadata: Metadata = { title: 'Códigos de distribuição — Administração (demonstração) USP Iconomy' }
+export const metadata: Metadata = { title: 'Códigos de distribuição | Administração (demonstração) USP Iconomy' }
 
 export default async function AdminDistributionCodesPage() {
   const [codes, courses] = await Promise.all([demoSource.listDistributionCodes(), demoSource.listCourses()])

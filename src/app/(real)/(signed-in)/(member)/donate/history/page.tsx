@@ -3,7 +3,7 @@ import { createApiSource } from '@/data/api/source'
 import { DonationHistoryScreen } from '@/screens/DonationHistoryScreen'
 import { UnderConstruction } from '@/screens/UnderConstruction'
 
-export const metadata: Metadata = { title: 'Minhas doações — USP Iconomy' }
+export const metadata: Metadata = { title: 'Minhas doações | USP Iconomy' }
 
 export default async function DonationHistoryPage() {
   const donations = await createApiSource().listDonations()

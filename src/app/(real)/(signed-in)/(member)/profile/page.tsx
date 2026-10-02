@@ -6,7 +6,7 @@ import { ProfileScreen } from '@/screens/ProfileScreen'
 import { UnderConstruction } from '@/screens/UnderConstruction'
 import { FORBIDDEN, guardApiRead } from '../../../member-status'
 
-export const metadata: Metadata = { title: 'Meu perfil e carteira — USP Iconomy' }
+export const metadata: Metadata = { title: 'Meu perfil e carteira | USP Iconomy' }
 
 export default async function ProfilePage() {
   const source = createApiSource()

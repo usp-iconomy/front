@@ -64,7 +64,7 @@ export function DonationFlow() {
                 active={selectedAmount === candidate.amountReais}
                 onClick={() => setSelectedAmount(candidate.amountReais)}
               >
-                R$ {candidate.amountReais} · {candidate.tokens} tokens · {candidate.monthlyScholarships} bolsa(s)
+                {`R$ ${candidate.amountReais}: ${candidate.tokens} tokens, ${candidate.monthlyScholarships} ${candidate.monthlyScholarships === 1 ? 'bolsa mensal' : 'bolsas mensais'}`}
               </Chip>
             </li>
           ))}
@@ -90,7 +90,7 @@ export function DonationFlow() {
       <FlowStep
         step={2}
         title="Pagamento"
-        description="PIX ou boleto — a confirmação libera os Distribution Codes para a comunidade escolhida."
+        description="Pague com PIX ou boleto. A confirmação libera os códigos de distribuição para a comunidade escolhida."
         status={confirmed ? 'done' : tier ? 'current' : 'pending'}
       >
         <form onSubmit={handlePay} className={styles.paymentForm}>

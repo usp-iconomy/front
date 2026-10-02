@@ -27,7 +27,7 @@ export const activityRecords: readonly ActivityRecord[] = [
   {
     id: 'act-3',
     occurredAt: '2026-07-30T13:00:00Z',
-    event: 'Token Alma — Liderança Feminista',
+    event: 'Token Alma: Liderança Feminista',
     participants: 34,
     impact: 'Empoderamento e rede',
   },

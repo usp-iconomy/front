@@ -16,7 +16,7 @@ export function DonationHistoryScreen({ entries }: { entries: readonly DonationH
 
         return (
           <section key={donation.id}>
-            <SectionHeader title={`R$ ${donation.amountReais} — ${formatDate(donation.createdAt)}`} />
+            <SectionHeader title={`R$ ${donation.amountReais} em ${formatDate(donation.createdAt)}`} />
             <DonorReportCard donation={donation} report={report} />
             <Divider />
           </section>

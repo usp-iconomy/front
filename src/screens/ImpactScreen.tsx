@@ -36,7 +36,7 @@ export function ImpactScreen({ data }: { data: ImpactData }) {
     <>
       <PageHeader
         title="Dashboard de impacto"
-        description="Velocity de circulação, certificações emitidas e retorno social — os números que a comunidade e os doadores acompanham."
+        description="Velocidade de circulação, certificações emitidas e retorno social: os números que a comunidade e quem doa acompanham."
       />
 
       <MetricGrid>

@@ -43,7 +43,7 @@ describe('CommunityDetail', () => {
 
   it('speaks in Token Alma and singular members', () => {
     render(<CommunityDetail community={{ ...community, members: 1 }} events={events} detailVisible />)
-    expect(screen.getByText(/Cavalcante, GO · 1 membro$/)).toBeInTheDocument()
+    expect(screen.getByText(/^1 membro em Cavalcante, GO$/)).toBeInTheDocument()
     expect(screen.getByRole('table', { name: 'Eventos presenciais com Token Alma' })).toBeInTheDocument()
   })
 })

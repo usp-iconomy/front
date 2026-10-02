@@ -9,7 +9,7 @@ import { AccessRestrictedScreen } from '@/screens/AccessRestrictedScreen'
 import { FORBIDDEN, guardApiRead } from '../../member-status'
 import styles from './layout.module.css'
 
-export const metadata: Metadata = { title: 'Administração — USP Iconomy' }
+export const metadata: Metadata = { title: 'Administração | USP Iconomy' }
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const admin = await guardApiRead(createApiSource().getAdmin())

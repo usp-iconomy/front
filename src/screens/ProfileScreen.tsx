@@ -36,7 +36,7 @@ const columns: readonly Column<Transaction>[] = [
     header: 'Valor',
     render: (row) =>
       row.amount === null ? (
-        '—'
+        'Não se aplica'
       ) : (
         <TokenAmount value={row.amount} direction={row.kind === 'sent' ? 'outgoing' : 'incoming'} />
       ),

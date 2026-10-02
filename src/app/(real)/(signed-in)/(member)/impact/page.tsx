@@ -3,7 +3,7 @@ import { createApiSource } from '@/data/api/source'
 import { ImpactScreen } from '@/screens/ImpactScreen'
 import { UnderConstruction } from '@/screens/UnderConstruction'
 
-export const metadata: Metadata = { title: 'Dashboard de impacto — USP Iconomy' }
+export const metadata: Metadata = { title: 'Dashboard de impacto | USP Iconomy' }
 
 export default async function ImpactPage() {
   const impact = await createApiSource().getImpact()

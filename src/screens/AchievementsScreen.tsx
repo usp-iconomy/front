@@ -20,8 +20,8 @@ export function AchievementsScreen({ soulTokens }: { soulTokens: readonly SoulTo
 
       <InfoBox title="O que são Tokens Alma?" icon="shield">
         São certificados digitais que ficam permanentemente ligados à sua carteira. Diferente dos tokens UAIFAI,
-        que circulam, um Token Alma não pode ser vendido, transferido ou delegado. Ele prova participação — em um
-        curso, em uma oficina, em uma assembleia — e, quando a atividade é presencial, registra também o local e a
+        que circulam, um Token Alma não pode ser vendido, transferido ou delegado. Ele prova participação em um
+        curso, em uma oficina ou em uma assembleia. Quando a atividade é presencial, registra também o local e a
         data. Para comunidades quilombolas, isso constitui um registro de pertença territorial que não depende de
         cadastro administrativo.
       </InfoBox>

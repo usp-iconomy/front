@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { demoSource } from '@/data/demo/source'
 import { ImpactScreen } from '@/screens/ImpactScreen'
 
-export const metadata: Metadata = { title: 'Dashboard de impacto — Demonstração USP Iconomy' }
+export const metadata: Metadata = { title: 'Dashboard de impacto | Demonstração USP Iconomy' }
 
 export default async function DemoImpactPage() {
   const impact = await demoSource.getImpact()

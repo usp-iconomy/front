@@ -80,7 +80,7 @@ export function SendCirculationForm() {
         id={`${messageId}-counter`}
         className={`${styles.counter} ${message.length > 0 && !messageIsValid ? styles.invalid : ''}`.trim()}
       >
-        Mínimo de {MIN_MESSAGE_LENGTH} caracteres — {message.trim().length} escritos
+        Mínimo de {MIN_MESSAGE_LENGTH} caracteres ({message.trim().length} escritos)
       </small>
 
       <div className={styles.actions}>

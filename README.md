@@ -1,6 +1,6 @@
-# USP Iconomy — Web
+# USP Iconomy Web
 
-Frontend da plataforma USP Iconomy (projeto UAIFAI — USP/IEA): educação
+Frontend da plataforma USP Iconomy (projeto UAIFAI, USP/IEA): educação
 comunitária onde o acesso a cursos é conquistado por circulação de tokens, não
 por pagamento.
 
@@ -85,7 +85,7 @@ Administração não é autoatribuível: o papel `admin` vem do backend.
 | `npm run lint` | ESLint |
 | `npm run typecheck` | `tsc --noEmit` |
 
-Rode `npm run build` antes de qualquer commit que toque em `.ts`/`.tsx` — é o
+Rode `npm run build` antes de qualquer commit que toque em `.ts`/`.tsx`. É o
 que pega import não usado, variável órfã e erro de tipo.
 
 ## Telas
@@ -165,7 +165,7 @@ Tokens em `src/design-system/tokens/tokens.css`, espelhados com tipos em
 `tokens.ts` para os casos em que um token precisa chegar ao JavaScript.
 
 Estilo em CSS Modules. Nenhum componente escreve hex, px de espaçamento ou
-tamanho de fonte direto — sempre `var(--token)`.
+tamanho de fonte direto: sempre `var(--token)`.
 
 ### Duas cores de marca, e o porquê
 
@@ -173,8 +173,8 @@ O teal institucional `#1094AB` alcança 3,6:1 sobre branco. Isso passa em WCAG A
 para texto grande e reprova para texto normal, o que inclui rótulo de botão,
 link e aba ativa.
 
-- `--color-accent` (`#1094AB`) — preenchimentos sem texto, bordas, numerais ≥24px
-- `--color-accent-strong` (`#0D7D90`) — todo texto e todo botão preenchido que
+- `--color-accent` (`#1094AB`): preenchimentos sem texto, bordas, numerais ≥24px
+- `--color-accent-strong` (`#0D7D90`): todo texto e todo botão preenchido que
   carrega texto (4,8:1)
 
 Os quatro tons de tipo de acesso também foram escurecidos em relação ao

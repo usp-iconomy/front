@@ -59,7 +59,7 @@ export function CommunityDetail({ community, events, detailVisible }: CommunityD
     <>
       <PageHeader
         title={community.name}
-        description={`${community.territory} · ${formatNumber(community.members)} ${community.members === 1 ? 'membro' : 'membros'}`}
+        description={`${formatNumber(community.members)} ${community.members === 1 ? 'membro' : 'membros'} em ${community.territory}`}
       />
 
       <StatGrid>

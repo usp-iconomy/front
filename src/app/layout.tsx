@@ -18,7 +18,7 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: 'USP Iconomy — Economia Simbólica do Conhecimento',
+  title: 'USP Iconomy | Economia Simbólica do Conhecimento',
   description:
     'Plataforma de educação comunitária da USP/IEA onde o acesso a cursos é conquistado por circulação e contribuição, não por pagamento.',
 }

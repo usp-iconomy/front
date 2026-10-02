@@ -21,7 +21,7 @@ export const transactions: readonly Transaction[] = [
   {
     id: 'tx-1',
     kind: 'sent',
-    description: 'Para João Santos — apoio à mentoria',
+    description: 'Para João Santos: apoio à mentoria',
     amount: 50,
     occurredAt: '2026-08-05T14:30:00Z',
     status: 'completed',
@@ -29,7 +29,7 @@ export const transactions: readonly Transaction[] = [
   {
     id: 'tx-2',
     kind: 'received',
-    description: 'De Coletivo Malê — facilitação de oficina',
+    description: 'De Coletivo Malê: facilitação de oficina',
     amount: 100,
     occurredAt: '2026-08-03T11:10:00Z',
     status: 'completed',
@@ -45,7 +45,7 @@ export const transactions: readonly Transaction[] = [
   {
     id: 'tx-4',
     kind: 'received',
-    description: 'Da Rede Quilombola — pesquisa colaborativa',
+    description: 'Da Rede Quilombola: pesquisa colaborativa',
     amount: 75,
     occurredAt: '2026-07-27T09:45:00Z',
     status: 'completed',

@@ -63,7 +63,7 @@ export function CourseReviewPanel({ submission, onDecide, onClose }: CourseRevie
       </div>
 
       <p className={styles.meta}>
-        {`${submission.submittedBy} · ${course.workloadHours}h · ${course.inPerson ? 'Presencial' : 'Online'} · ${course.issuesSbt ? 'Emite Token Alma' : 'Sem Token Alma'}`}
+        {`Enviado por ${submission.submittedBy}. ${course.workloadHours}h, ${course.inPerson ? 'presencial' : 'online'}, ${course.issuesSbt ? 'emite Token Alma' : 'sem Token Alma'}.`}
       </p>
       <p className={styles.description}>{course.description}</p>
       <ul className={styles.badges} aria-label="Tipos de acesso">
@@ -78,7 +78,7 @@ export function CourseReviewPanel({ submission, onDecide, onClose }: CourseRevie
       <ol className={styles.history}>
         {submission.history.map((event, index) => (
           <li key={`${event.at}-${index}`}>
-            <time dateTime={event.at}>{formatDate(event.at)}</time> · {reviewStatusPresentation[event.status].label} ·{' '}
+            <time dateTime={event.at}>{formatDate(event.at)}</time>: {reviewStatusPresentation[event.status].label}, por{' '}
             {event.actorName}
             {event.note && <blockquote className={styles.note}>{event.note}</blockquote>}
           </li>
