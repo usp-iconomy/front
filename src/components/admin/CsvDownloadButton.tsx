@@ -13,7 +13,7 @@ export function CsvDownloadButton({ filename, csv, label }: CsvDownloadButtonPro
   function handleClick() {
     const content = typeof csv === 'function' ? csv() : csv
     // BOM, so Excel opens the accents as UTF-8.
-    const blob = new Blob(['﻿', content], { type: 'text/csv;charset=utf-8' })
+    const blob = new Blob(['\ufeff', content], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
