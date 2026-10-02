@@ -1,12 +1,17 @@
 import type { NextAuthConfig, Session } from 'next-auth'
 import Keycloak from 'next-auth/providers/keycloak'
 import { isPublicPath, safeRedirect } from './routes'
+import { createSingleFlightRefresh } from './refresh-single-flight'
 import { publicSession, refreshTokens, shouldRefresh, type SessionTokens } from './tokens'
 
 export const issuer = process.env.AUTH_KEYCLOAK_ISSUER ?? 'http://localhost:8080/realms/iconomy'
 export const clientId = process.env.AUTH_KEYCLOAK_ID ?? 'iconomy-web'
 export const tokenEndpoint = `${issuer}/protocol/openid-connect/token`
 export const endSessionEndpoint = `${issuer}/protocol/openid-connect/logout`
+
+const refreshOnce = createSingleFlightRefresh((tokens) =>
+  refreshTokens(tokens, { tokenEndpoint, clientId, nowSeconds: Math.floor(Date.now() / 1000) }),
+)
 
 export const authConfig = {
   providers: [
@@ -46,8 +51,7 @@ export const authConfig = {
       if (!tokens.expiresAt || tokens.error) return token
       const now = Math.floor(Date.now() / 1000)
       if (!shouldRefresh(tokens.expiresAt, now)) return token
-      const refreshed = await refreshTokens(tokens, { tokenEndpoint, clientId, nowSeconds: now })
-      return { ...token, ...refreshed }
+      return { ...token, ...(await refreshOnce(tokens)) }
     },
     session({ token }) {
       // No `expires`: the public session is identity and error state only.

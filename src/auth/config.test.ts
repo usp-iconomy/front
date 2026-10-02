@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { authConfig } from './config'
 
 describe('authConfig.callbacks.session', () => {
@@ -56,5 +56,28 @@ describe('authConfig.callbacks.authorized', () => {
     expect(location.pathname).toBe('/')
     expect(location.searchParams.get('reason')).toBe('session-expired')
     expect(location.searchParams.get('callbackUrl')).toBe('http://localhost:3000/profile?tab=wallet')
+  })
+})
+
+describe('authConfig.callbacks.jwt', () => {
+  it('refreshes once for concurrent requests that carry the same expired session', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(
+      async () =>
+        new Response(JSON.stringify({ access_token: 'access-2', refresh_token: 'refresh-2', expires_in: 900 }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    )
+    const token = { accessToken: 'access-1', refreshToken: 'concurrent-refresh-1', idToken: 'id-1', expiresAt: 1 }
+
+    const [first, second] = await Promise.all([
+      authConfig.callbacks.jwt({ token: { ...token } } as never),
+      authConfig.callbacks.jwt({ token: { ...token } } as never),
+    ])
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(first).toMatchObject({ accessToken: 'access-2', refreshToken: 'refresh-2' })
+    expect(second).toEqual(first)
+    fetchMock.mockRestore()
   })
 })
