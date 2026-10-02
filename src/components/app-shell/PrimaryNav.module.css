@@ -11,6 +11,11 @@
   height: 100%;
 }
 
+/* The li stretches to the header height; the link only follows if the li is flex. */
+.list > li {
+  display: flex;
+}
+
 .link {
   display: flex;
   align-items: center;

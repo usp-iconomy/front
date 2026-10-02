@@ -14,3 +14,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/admin/token-settings`: multiplicador do incremento e decaimento semanal, com revisão antes/depois. A taxa de cada comunidade quilombola fica sempre abaixo da padrão (RN-07), e o admin quilombola só altera a da própria comunidade.
 - `/admin/users`: busca de usuários por nome ou e-mail (sem precisar de acento), filtro por papel e troca de papel. Ninguém muda o próprio papel, e a última pessoa na administração não perde o papel.
 - Página 404 em português com atalhos para os cursos e para a administração.
+
+### Fixed
+
+- Menu do topo das telas de membro: os itens ficavam encostados na borda de cima do cabeçalho em vez de centralizados, e o sublinhado do item ativo não chegava à borda de baixo.
