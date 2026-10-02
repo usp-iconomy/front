@@ -13,8 +13,8 @@ export const userRoles: readonly UserRole[] = ['student', 'teacher', 'admin', 'd
 export type RoleChangeError = 'unknown_user' | 'unchanged' | 'self_change' | 'last_admin'
 
 export const roleChangeErrorMessage: Record<RoleChangeError, string> = {
-  unknown_user: 'Usuário não encontrado.',
-  unchanged: 'O usuário já tem esse papel.',
+  unknown_user: 'Pessoa não encontrada.',
+  unchanged: 'Essa pessoa já tem esse papel.',
   self_change: 'Você não pode mudar o próprio papel. Peça para outra pessoa da administração.',
   last_admin: 'Esta é a última pessoa na administração. Dê esse papel a outra pessoa antes de mudar este.',
 }
