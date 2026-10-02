@@ -178,3 +178,19 @@ export type ReviewDecision =
   | { kind: 'approve' }
   | { kind: 'request_changes'; note: string }
   | { kind: 'reject'; note: string }
+
+/** RF-09 — a scholarship code as configured in the Explorer. */
+export type DistributionCode = {
+  code: string
+  name: string
+  tokensPerRedemption: number
+  maxRedemptions: number
+  redemptionsUsed: number
+  /** UTC instants. Both ends are inclusive. */
+  validFrom: string
+  validUntil: string
+  courseId?: string
+}
+
+/** RN-06 — derived from dates and usage, never stored. */
+export type DistributionCodeStatus = 'scheduled' | 'active' | 'exhausted' | 'expired'
