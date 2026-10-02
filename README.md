@@ -64,7 +64,8 @@ aceita redirect para `http://localhost:3000/*`; em outra porta o login falha.
 `AUTH_URL` (já em `.env.example`) também precisa apontar para essa origem:
 `next start` exige, e o logout usa para voltar a `/`.
 
-Usuários de teste do realm, todos com a senha `iconomy2026`:
+Usuários de teste do realm. A senha é a de `KC_SEED_PASSWORD`, no `.env` da
+API, gerada pelo `make setup` de cada máquina:
 
 | Usuário | Sugestão de uso |
 |---|---|
