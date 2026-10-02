@@ -232,3 +232,15 @@ export type CommunityRateOverride = {
   communityId: string
   weeklyDecayPercent: number
 }
+
+/** RF-14 — a member as the role-management screen sees them. */
+export type ManagedUser = {
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  joinedAt: string
+  tokenBalance: number
+  /** RN-03 — tokens sent in the last 30 days. */
+  sent30d: number
+}
