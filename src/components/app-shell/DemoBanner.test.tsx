@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { DemoBanner } from './DemoBanner'
 
 describe('DemoBanner', () => {
-  it('says the data is fictitious and leads back to the entry page', () => {
+  it('offers only the way out of the demo, named for assistive tech', () => {
     render(<DemoBanner />)
-    expect(screen.getByRole('note')).toHaveTextContent('Demonstração · dados fictícios')
+    expect(screen.getByRole('note', { name: 'Modo demonstração' })).toHaveTextContent(/^Sair da demonstração$/)
     expect(screen.getByRole('link', { name: 'Sair da demonstração' })).toHaveAttribute('href', '/')
   })
 })

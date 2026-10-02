@@ -14,14 +14,6 @@
   font-size: var(--font-size-sm);
 }
 
-.label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: var(--font-weight-medium);
-}
-
 .exit {
   display: flex;
   align-items: center;
