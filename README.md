@@ -77,6 +77,23 @@ no Mailpit). Nenhum usuário vem com papel: cada pessoa escolhe o seu na tela de
 onboarding, no primeiro login.
 Administração não é autoatribuível: o papel `admin` vem do backend.
 
+### Tela de login (tema do Keycloak)
+
+As telas de login, cadastro e recuperação de senha são do Keycloak, com o tema
+em `keycloak-theme/` (Keycloakify, React 18, os mesmos tokens de
+`src/design-system`). É um projeto à parte, com `package.json` próprio, fora do
+build e dos testes do Next.
+
+```bash
+cd keycloak-theme
+npm install
+npm run dev            # pré-visualização em http://localhost:5173/?page=login.ftl
+npm run build-theme    # gera dist_keycloak/usp-iconomy-theme.jar (precisa de Maven)
+```
+
+Para publicar, copie o jar para `infrastructure/keycloak/providers/` no repo da
+API e recrie o container (`docker compose up -d --force-recreate keycloak`).
+
 | Script | O que faz |
 |---|---|
 | `npm run dev` | Servidor de desenvolvimento |
