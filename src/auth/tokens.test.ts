@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest'
 import { REFRESH_MARGIN_SECONDS, publicSession, refreshTokens, shouldRefresh, type SessionTokens } from './tokens'
 
 const tokens: SessionTokens = {
@@ -32,6 +32,20 @@ describe('shouldRefresh', () => {
 })
 
 describe('refreshTokens', () => {
+  let warn: MockInstance<typeof console.warn>
+
+  beforeEach(() => {
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function warned(): string {
+    return warn.mock.calls.map((call) => call.map(String).join(' ')).join('\n')
+  }
+
   it('posts the refresh grant for the public client, without a secret', async () => {
     const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
       jsonResponse({ access_token: 'new-access', refresh_token: 'new-refresh', id_token: 'new-id', expires_in: 300 }),
@@ -82,6 +96,7 @@ describe('refreshTokens', () => {
     const refreshed = await refreshTokens(tokens, { ...options, fetchImpl })
 
     expect(refreshed).toEqual({ ...tokens, error: 'RefreshFailed' })
+    expect(warned()).toContain('400')
   })
 
   it('marks the session as failed when Keycloak is unreachable', async () => {
@@ -90,6 +105,43 @@ describe('refreshTokens', () => {
     const refreshed = await refreshTokens(tokens, { ...options, fetchImpl })
 
     expect(refreshed).toEqual({ ...tokens, error: 'RefreshFailed' })
+    expect(warned()).toContain('TypeError')
+  })
+
+  it.each([
+    ['no access_token', { expires_in: 300 }],
+    ['a non-string access_token', { access_token: 42, expires_in: 300 }],
+    ['no expires_in', { access_token: 'new-access' }],
+    ['a string expires_in', { access_token: 'new-access', expires_in: '300' }],
+    ['a non-finite expires_in', { access_token: 'new-access', expires_in: null }],
+  ])('marks the session as failed on a 2xx body with %s', async (_label, body) => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(jsonResponse(body))
+
+    const refreshed = await refreshTokens(tokens, { ...options, fetchImpl })
+
+    expect(refreshed).toEqual({ ...tokens, error: 'RefreshFailed' })
+    expect(warn).toHaveBeenCalled()
+  })
+
+  it('marks the session as failed on a 2xx body that is not JSON', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(new Response('<html>', { status: 200 }))
+
+    const refreshed = await refreshTokens(tokens, { ...options, fetchImpl })
+
+    expect(refreshed).toEqual({ ...tokens, error: 'RefreshFailed' })
+    expect(warned()).toContain('SyntaxError')
+  })
+
+  it('never logs a token', async () => {
+    const failures = [
+      vi.fn<typeof fetch>().mockResolvedValue(jsonResponse({ error: 'invalid_grant' }, 400)),
+      vi.fn<typeof fetch>().mockRejectedValue(new TypeError('fetch failed')),
+      vi.fn<typeof fetch>().mockResolvedValue(jsonResponse({ access_token: 'leaky-access' })),
+    ]
+    for (const fetchImpl of failures) await refreshTokens(tokens, { ...options, fetchImpl })
+
+    expect(warn).toHaveBeenCalledTimes(3)
+    for (const secret of ['old-access', 'old-refresh', 'old-id', 'leaky-access']) expect(warned()).not.toContain(secret)
   })
 })
 

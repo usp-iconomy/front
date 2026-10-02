@@ -3,11 +3,19 @@ import { getToken } from 'next-auth/jwt'
 import { headers } from 'next/headers'
 import type { SessionTokens } from './tokens'
 
+/** Mirrors how Auth.js names the cookie it writes: AUTH_URL's scheme wins, else the forwarded one. */
+function usesSecureCookie(requestHeaders: Headers): boolean {
+  const authUrl = process.env.AUTH_URL
+  if (authUrl) return authUrl.startsWith('https://')
+  return requestHeaders.get('x-forwarded-proto')?.split(',')[0]?.trim() === 'https'
+}
+
 async function readTokens(): Promise<Partial<SessionTokens> | null> {
+  const requestHeaders = await headers()
   const token = await getToken({
-    req: { headers: await headers() },
+    req: { headers: requestHeaders },
     secret: process.env.AUTH_SECRET,
-    secureCookie: process.env.NODE_ENV === 'production',
+    secureCookie: usesSecureCookie(requestHeaders),
   })
   return token as Partial<SessionTokens> | null
 }
