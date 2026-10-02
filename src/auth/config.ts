@@ -23,7 +23,14 @@ export const authConfig = {
   callbacks: {
     authorized({ auth: session, request }) {
       if (isPublicPath(request.nextUrl.pathname)) return true
-      return Boolean(session?.user) && !session?.error
+      if (session?.error) {
+        // A dead refresh token is an expired session, not an anonymous visit: the entry page says so.
+        const entry = new URL('/', request.nextUrl.origin)
+        entry.searchParams.set('reason', 'session-expired')
+        entry.searchParams.set('callbackUrl', request.nextUrl.href)
+        return Response.redirect(entry, 307)
+      }
+      return Boolean(session?.user)
     },
     async jwt({ token, account }) {
       if (account) {

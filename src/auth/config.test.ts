@@ -30,3 +30,31 @@ describe('authConfig.callbacks.session', () => {
     expect(result).toEqual({ user: { name: 'Ana', email: 'ana@usp.br' }, error: 'RefreshFailed' })
   })
 })
+
+describe('authConfig.callbacks.authorized', () => {
+  const authorized = (session: unknown, url: string) =>
+    authConfig.callbacks.authorized({ auth: session, request: { nextUrl: new URL(url) } } as never)
+
+  it('lets anyone into public paths', () => {
+    expect(authorized(null, 'http://localhost:3000/demo/courses')).toBe(true)
+  })
+
+  it('lets a signed-in member into the real tree and turns everyone else away', () => {
+    expect(authorized({ user: { name: 'Ana' } }, 'http://localhost:3000/courses')).toBe(true)
+    expect(authorized(null, 'http://localhost:3000/courses')).toBe(false)
+  })
+
+  it('sends a session whose refresh failed to the entry page with the expiry notice', () => {
+    const result = authorized(
+      { user: { name: 'Ana' }, error: 'RefreshFailed' },
+      'http://localhost:3000/profile?tab=wallet',
+    )
+
+    expect(result).toBeInstanceOf(Response)
+    const location = new URL((result as Response).headers.get('location')!)
+    expect(location.origin).toBe('http://localhost:3000')
+    expect(location.pathname).toBe('/')
+    expect(location.searchParams.get('reason')).toBe('session-expired')
+    expect(location.searchParams.get('callbackUrl')).toBe('http://localhost:3000/profile?tab=wallet')
+  })
+})
