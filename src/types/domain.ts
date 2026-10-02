@@ -194,3 +194,27 @@ export type DistributionCode = {
 
 /** RN-06 — derived from dates and usage, never stored. */
 export type DistributionCodeStatus = 'scheduled' | 'active' | 'exhausted' | 'expired'
+
+/** RF-13 — a quilombola community registered in the Explorer. */
+export type QuilombolaCommunity = {
+  id: string
+  name: string
+  territory: string
+  members: number
+  /** RN-09 — set by the community's administrator. USP sees detail only when true. */
+  dataSharingConsent: boolean
+}
+
+/** RF-12, RF-13 — an in-person activity whose participants received an SBT. */
+export type TerritorialEvent = {
+  id: string
+  communityId: string
+  name: string
+  activityType: string
+  occurredAt: string
+  organizer: string
+  /** Place inside the territory, used for participation by territory. */
+  locality: string
+  coordinates: { lat: number; lng: number }
+  participants: readonly { memberId: string; name: string }[]
+}
