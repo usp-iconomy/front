@@ -22,6 +22,8 @@ export async function chooseRoleAction(_state: OnboardingState, formData: FormDa
   } catch (error) {
     if (!(error instanceof ApiError)) throw error
     if (error.status === 401) redirect(SESSION_EXPIRED_PATH)
+    // 403: the account is disabled. The onboarding page reads /auth/me again and shows "Acesso restrito".
+    if (error.status === 403) redirect('/onboarding')
     // 409: the role was already chosen, say in another tab. Onboarding is over either way.
     if (error.status === 409) redirect('/courses')
     if (error.status === 422) return { error: error.detail || 'Não foi possível salvar esse perfil.', role }

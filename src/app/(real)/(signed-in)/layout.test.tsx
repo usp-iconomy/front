@@ -1,3 +1,4 @@
+import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/data/api/client'
 import SignedInLayout from './layout'
@@ -10,6 +11,7 @@ const mocks = vi.hoisted(() => ({
 }))
 vi.mock('@/data/api/source', () => ({ getMemberStatus: mocks.getMemberStatus }))
 vi.mock('next/navigation', () => ({ redirect: mocks.redirect }))
+vi.mock('@/auth/actions', () => ({ signOutAction: vi.fn() }))
 
 const children = <p>tela</p>
 
@@ -35,5 +37,16 @@ describe('signed-in layout', () => {
     )
 
     await expect(SignedInLayout({ children })).rejects.toThrow('redirect:/?reason=session-expired')
+  })
+
+  it('shows "Acesso restrito" instead of the screen when the API disables the account (403)', async () => {
+    mocks.getMemberStatus.mockRejectedValue(new ApiError({ status: 403, code: 'forbidden', title: 'Forbidden', detail: '' }))
+
+    render(await SignedInLayout({ children }))
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Acesso restrito' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Sair' })).toBeInTheDocument()
+    expect(screen.queryByText('tela')).not.toBeInTheDocument()
+    expect(mocks.redirect).not.toHaveBeenCalled()
   })
 })

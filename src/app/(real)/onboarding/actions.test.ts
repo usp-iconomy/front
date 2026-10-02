@@ -68,4 +68,10 @@ describe('chooseRoleAction', () => {
 
     await expect(chooseRoleAction({ error: null, role: null }, form('student'))).rejects.toBe(failure)
   })
+
+  it('sends a disabled account (403) back to onboarding, which shows "Acesso restrito"', async () => {
+    mocks.chooseRole.mockRejectedValue(apiError(403))
+
+    await expect(chooseRoleAction({ error: null, role: null }, form('student'))).rejects.toThrow('redirect:/onboarding')
+  })
 })

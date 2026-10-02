@@ -6,7 +6,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Modo real: login pelo Keycloak, escolha de perfil no primeiro acesso e telas ainda sem servidor marcadas como "Em construção", com atalho para a demonstração. O `/admin` real exige o papel de administração e hoje mostra "Em construção"; o backoffice completo está em `/demo/admin`.
+- Modo real: login pelo Keycloak, escolha de perfil no primeiro acesso e telas ainda sem servidor marcadas como "Em construção", com atalho para a demonstração. O `/admin` real exige o papel de administração e hoje mostra "Em construção"; o backoffice completo está em `/demo/admin`. Uma conta desativada no servidor vê "Acesso restrito", com "Sair", em qualquer tela do modo real.
 - Área administrativa em `/demo/admin`, com menu lateral por perfil: o admin USP vê todas as seções e o admin quilombola só a taxa e os dados da própria comunidade. Quem abre uma seção fora do perfil vê "Acesso restrito".
 - `/demo/admin`: visão geral da comunidade com velocidade de circulação contra a meta de 2, sentimento das mensagens, saldos parados (Unpaid-Degrees), quem mais circulou e ranking de cursos.
 - `/demo/admin/courses`: fila de aprovação de cursos com o curso aberto ao lado da lista, filtro por status e decisão de publicar, pedir ajustes ou rejeitar. As duas últimas exigem um comentário de pelo menos 10 caracteres.
