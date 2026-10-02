@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { demoSource } from '@/data/demo/source'
 import { AdminTokenSettingsScreen } from '@/screens/AdminTokenSettingsScreen'
 
-export const metadata: Metadata = { title: 'Taxas do token — Demonstração USP Iconomy' }
+export const metadata: Metadata = { title: 'Taxas do token — Administração (demonstração) USP Iconomy' }
 
 export default async function AdminTokenSettingsPage() {
   const [admin, rates, communities] = await Promise.all([

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { AdminShell } from '@/components/admin/AdminShell'
 import { demoSource } from '@/data/demo/source'
 
-export const metadata: Metadata = { title: 'Administração — Demonstração USP Iconomy' }
+export const metadata: Metadata = { title: 'Administração (demonstração) — USP Iconomy' }
 
 export default async function DemoAdminLayout({ children }: { children: ReactNode }) {
   const admin = await demoSource.getAdmin()

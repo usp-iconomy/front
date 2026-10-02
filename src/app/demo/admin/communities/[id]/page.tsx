@@ -4,7 +4,7 @@ import { CommunityDetail } from '@/components/admin/CommunityDetail'
 import { demoSource } from '@/data/demo/source'
 import { canViewTerritorialDetail } from '@/lib/quilombola'
 
-export const metadata: Metadata = { title: 'Comunidade — Demonstração USP Iconomy' }
+export const metadata: Metadata = { title: 'Comunidade — Administração (demonstração) USP Iconomy' }
 
 export default async function AdminCommunityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
