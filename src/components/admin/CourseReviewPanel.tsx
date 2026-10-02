@@ -52,7 +52,7 @@ export function CourseReviewPanel({ submission, onDecide, onClose }: CourseRevie
   }
 
   return (
-    <Card as="section" aria-labelledby={`${id}-title`} className={styles.panel}>
+    <Card as="section" aria-labelledby={`${id}-title`}>
       <div className={styles.header}>
         <h2 id={`${id}-title`} ref={headingRef} tabIndex={-1} className={styles.title}>
           {course.title}

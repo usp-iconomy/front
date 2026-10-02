@@ -23,7 +23,7 @@ const emptyDraft: DistributionCodeDraft = {
 
 function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: ReactNode }) {
   return (
-    <div className={styles.field}>
+    <div>
       <label htmlFor={id} className={styles.label}>
         {label}
       </label>
