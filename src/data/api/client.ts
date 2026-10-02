@@ -6,8 +6,8 @@ export class ApiError extends Error {
   readonly title: string
   readonly detail: string
 
-  constructor(fields: { status: number; code: string; title: string; detail: string }) {
-    super(fields.detail || fields.title)
+  constructor(fields: { status: number; code: string; title: string; detail: string; cause?: unknown }) {
+    super(fields.detail || fields.title, fields.cause === undefined ? undefined : { cause: fields.cause })
     this.name = 'ApiError'
     this.status = fields.status
     this.code = fields.code
@@ -45,6 +45,17 @@ async function toApiError(response: Response): Promise<ApiError> {
   }
 }
 
+function transportError(error: unknown): ApiError {
+  const timedOut = isTimeout(error)
+  return new ApiError({
+    status: 0,
+    code: timedOut ? 'timeout' : 'network_error',
+    title: timedOut ? 'Request timed out' : 'Network error',
+    detail: (error as { message?: unknown } | null)?.message?.toString() ?? '',
+    cause: error,
+  })
+}
+
 /** `fetchImpl` is injectable for tests; defaults to global fetch. */
 export function createApiClient(options: { baseUrl: string; fetchImpl?: typeof fetch; timeoutMs?: number }) {
   const { baseUrl, fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS } = options
@@ -67,18 +78,28 @@ export function createApiClient(options: { baseUrl: string; fetchImpl?: typeof f
           signal: AbortSignal.timeout(timeoutMs),
         })
       } catch (error) {
-        const timedOut = isTimeout(error)
-        throw new ApiError({
-          status: 0,
-          code: timedOut ? 'timeout' : 'network_error',
-          title: timedOut ? 'Request timed out' : 'Network error',
-          detail: (error as { message?: unknown } | null)?.message?.toString() ?? '',
-        })
+        throw transportError(error)
       }
 
       if (!response.ok) throw await toApiError(response)
       if (response.status === 204) return undefined as T
-      return (await response.json()) as T
+
+      let text: string
+      try {
+        text = await response.text()
+      } catch (error) {
+        throw transportError(error)
+      }
+      try {
+        return JSON.parse(text) as T
+      } catch {
+        throw new ApiError({
+          status: response.status,
+          code: 'invalid_response',
+          title: 'Invalid response',
+          detail: '',
+        })
+      }
     },
   }
 }

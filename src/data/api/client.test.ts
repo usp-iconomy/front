@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ApiError, createApiClient } from './client'
 
 const BASE = 'http://localhost:8000'
@@ -29,7 +29,18 @@ async function catchError(promise: Promise<unknown>): Promise<ApiError> {
   throw new Error('expected the request to reject')
 }
 
+function failingBody(error: unknown, status = 200): Response {
+  const body = new ReadableStream({
+    start(controller) {
+      controller.error(error)
+    },
+  })
+  return new Response(body, { status, headers: { 'content-type': 'application/json' } })
+}
+
 describe('createApiClient', () => {
+  afterEach(() => vi.restoreAllMocks())
+
   it('sends the bearer token and Accept header, with no body headers on a GET', async () => {
     const fetchImpl = vi.fn<typeof fetch>().mockImplementation(async () => json({}))
     await clientWith(fetchImpl).request('/auth/me', { accessToken: 'tok' })
@@ -135,8 +146,6 @@ describe('createApiClient', () => {
 
     await clientWith(fetchImpl, { timeoutMs: 250 }).request('/auth/me', { accessToken: 'tok' })
     expect(timeout).toHaveBeenLastCalledWith(250)
-
-    timeout.mockRestore()
   })
 
   it.each(['AbortError', 'TimeoutError'])('maps a %s to a timeout ApiError with status 0', async (name) => {
@@ -146,5 +155,60 @@ describe('createApiClient', () => {
     expect(error).toBeInstanceOf(ApiError)
     expect(error.status).toBe(0)
     expect(error.code).toBe('timeout')
+  })
+
+  it('keeps a missing problem+json field on its http_<status> fallback', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockImplementation(async () => json({ title: 'X' }, 409))
+    const error = await catchError(clientWith(fetchImpl).request('/things', { accessToken: 'tok' }))
+
+    expect(error.status).toBe(409)
+    expect(error.code).toBe('http_409')
+    expect(error.title).toBe('X')
+    expect(error.detail).toBe('')
+  })
+
+  it('maps a timeout during the 2xx body read to a timeout ApiError', async () => {
+    const reason = new DOMException('aborted', 'TimeoutError')
+    const fetchImpl = vi.fn<typeof fetch>().mockImplementation(async () => failingBody(reason))
+    const error = await catchError(clientWith(fetchImpl).request('/auth/me', { accessToken: 'tok' }))
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.status).toBe(0)
+    expect(error.code).toBe('timeout')
+  })
+
+  it('maps any other 2xx body read failure to a network_error ApiError', async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockImplementation(async () => failingBody(new TypeError('terminated')))
+    const error = await catchError(clientWith(fetchImpl).request('/auth/me', { accessToken: 'tok' }))
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.status).toBe(0)
+    expect(error.code).toBe('network_error')
+  })
+
+  it.each([
+    ['empty', '', 200],
+    ['not JSON', '<html>ok</html>', 201],
+  ])('maps a 2xx body that is %s to an invalid_response ApiError', async (_label, text, status) => {
+    const fetchImpl = vi.fn<typeof fetch>().mockImplementation(async () => new Response(text, { status }))
+    const error = await catchError(clientWith(fetchImpl).request('/things', { accessToken: 'tok' }))
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.status).toBe(status)
+    expect(error.code).toBe('invalid_response')
+    expect(error.title).toBe('Invalid response')
+    expect(error.detail).toBe('')
+  })
+
+  it('keeps the underlying error as cause on network_error and timeout', async () => {
+    const down = new TypeError('fetch failed')
+    let fetchImpl = vi.fn<typeof fetch>().mockRejectedValue(down)
+    expect((await catchError(clientWith(fetchImpl).request('/a', { accessToken: 't' }))).cause).toBe(down)
+
+    const aborted = new DOMException('aborted', 'TimeoutError')
+    fetchImpl = vi.fn<typeof fetch>().mockRejectedValue(aborted)
+    expect((await catchError(clientWith(fetchImpl).request('/a', { accessToken: 't' }))).cause).toBe(aborted)
   })
 })
