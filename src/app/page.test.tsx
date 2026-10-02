@@ -54,6 +54,13 @@ describe('entry page', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Sua sessão expirou.')
   })
 
+  it('treats a valid session as signed out when the API turned it away (reason=session-expired)', async () => {
+    session.current = { user: { name: 'Maria Joana' } }
+    await renderHome({ reason: 'session-expired' })
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Continuar como/ })).not.toBeInTheDocument()
+  })
+
   it('takes the destination from an absolute callbackUrl on the app origin', async () => {
     await renderHome({ callbackUrl: 'http://localhost:3000/admin/users?tab=roles' })
     expect(nextValue()).toBe('/admin/users?tab=roles')
