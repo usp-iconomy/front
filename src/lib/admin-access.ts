@@ -55,3 +55,17 @@ export function canAccessAdminPath(scope: AdminScope, pathname: string): boolean
   if (section === 'communities') return pathname === `/admin/communities/${scope.communityId}`
   return true
 }
+
+export type AdminEntry = { href: string; scopeLabel: string; description: string }
+
+/** Where "Administração" leads from the platform: the overview, or a quilombola admin's own community. */
+export function adminEntryFor(scope: AdminScope): AdminEntry {
+  if (scope.kind === 'usp') {
+    return { href: '/admin', scopeLabel: 'Administração USP', description: 'Cursos, códigos, taxas e usuários' }
+  }
+  return {
+    href: `/admin/communities/${scope.communityId}`,
+    scopeLabel: 'Administração quilombola',
+    description: 'Dados e taxa da sua comunidade',
+  }
+}
