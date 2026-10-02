@@ -218,3 +218,17 @@ export type TerritorialEvent = {
   coordinates: { lat: number; lng: number }
   participants: readonly { memberId: string; name: string }[]
 }
+
+/** RF-07 — ARIGATO CREATION parameters set in the Explorer. */
+export type TokenRateSettings = {
+  /** Scales the documented increment, sent × (sent / balance). 1 = the formula as written (spec D7). */
+  incrementMultiplier: number
+  /** Share of an inactive balance removed each week, 0 to 100. */
+  weeklyDecayPercent: number
+}
+
+/** RN-07 — a quilombola community's own, lower decay rate. */
+export type CommunityRateOverride = {
+  communityId: string
+  weeklyDecayPercent: number
+}
