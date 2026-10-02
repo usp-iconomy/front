@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { OnboardingScreen, type OnboardingAction } from './OnboardingScreen'
+import { OnboardingScreen, type OnboardingAction, type OnboardingRole } from './OnboardingScreen'
 
 describe('OnboardingScreen', () => {
   it('offers the three self-assignable profiles and no administration', () => {
@@ -16,22 +16,31 @@ describe('OnboardingScreen', () => {
       'Financiar bolsas para quem não tem histórico',
     )
     expect(screen.queryByRole('radio', { name: /Administração/ })).not.toBeInTheDocument()
+    expect(screen.getByText('Fazer cursos e circular tokens').closest('[aria-hidden]')).toBeNull()
   })
 
-  it('keeps "Continuar" disabled until a profile is picked', async () => {
+  it('keeps "Continuar" enabled and explains an empty choice without calling the server', async () => {
     const user = userEvent.setup()
-    render(<OnboardingScreen action={vi.fn()} />)
+    const action = vi.fn<OnboardingAction>()
+    render(<OnboardingScreen action={action} />)
 
     const submit = screen.getByRole('button', { name: 'Continuar' })
-    expect(submit).toBeDisabled()
+    expect(submit).toBeEnabled()
+    await user.click(submit)
+
+    expect(screen.getByRole('status')).toHaveTextContent('Escolha um perfil para continuar.')
+    expect(action).not.toHaveBeenCalled()
 
     await user.click(screen.getByRole('radio', { name: 'Docência' }))
-    expect(submit).toBeEnabled()
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
   })
 
-  it('submits the picked role and shows the error the action returns', async () => {
+  it('shows the API error and keeps the picked profile checked for a retry', async () => {
     const user = userEvent.setup()
-    const action = vi.fn<OnboardingAction>(async () => ({ error: 'role must be one of: student, teacher, donor' }))
+    const action = vi.fn<OnboardingAction>(async (_state, formData) => ({
+      error: 'role must be one of: student, teacher, donor',
+      role: formData.get('role') as OnboardingRole,
+    }))
     render(<OnboardingScreen action={action} />)
 
     expect(screen.getByRole('status')).toBeEmptyDOMElement()
@@ -40,7 +49,10 @@ describe('OnboardingScreen', () => {
 
     expect(await screen.findByText('role must be one of: student, teacher, donor')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('role must be one of: student, teacher, donor')
-    expect(action).toHaveBeenCalledTimes(1)
-    expect(action.mock.calls[0]![1].get('role')).toBe('student')
+    expect(screen.getByRole('radio', { name: 'Estudante' })).toBeChecked()
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+    await waitFor(() => expect(action).toHaveBeenCalledTimes(2))
+    expect(action.mock.calls.map(([, formData]) => formData.get('role'))).toEqual(['student', 'student'])
   })
 })
