@@ -2,10 +2,13 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
+import { AdminShell } from '@/components/admin/AdminShell'
 import { AppShell } from '@/components/app-shell/AppShell'
 import type { Result } from '@/data/contracts'
 import { demoSource } from '@/data/demo/source'
 import { adminEntryFor } from '@/lib/admin-access'
+import { AdminCommunitiesScreen } from '@/screens/AdminCommunitiesScreen'
+import { AdminOverviewScreen } from '@/screens/AdminOverviewScreen'
 import { CoursesScreen } from '@/screens/CoursesScreen'
 import { ProfileScreen } from '@/screens/ProfileScreen'
 
@@ -18,9 +21,20 @@ async function demo<T>(result: Promise<Result<T>>): Promise<T> {
   return settled.data
 }
 
+function inDemo(href: string | null) {
+  return href === '/demo' || (href?.startsWith('/demo/') ?? false)
+}
+
+async function internalHrefs(container: HTMLElement) {
+  // The account menu renders its links only while open.
+  await userEvent.setup().click(screen.getByRole('button', { name: /Menu da conta/ }))
+  return [...container.ownerDocument.querySelectorAll<HTMLAnchorElement>('a[href^="/"]')].map((link) =>
+    link.getAttribute('href'),
+  )
+}
+
 async function renderInDemoShell(screenElement: ReactNode) {
   const admin = await demo(demoSource.getAdmin())
-  const user = userEvent.setup()
   const { container } = render(
     <AppShell
       mode="demo"
@@ -31,11 +45,14 @@ async function renderInDemoShell(screenElement: ReactNode) {
       {screenElement}
     </AppShell>,
   )
-  // The account menu renders its links only while open.
-  await user.click(screen.getByRole('button', { name: /Menu da conta/ }))
-  return [...container.ownerDocument.querySelectorAll<HTMLAnchorElement>('a[href^="/"]')].map((link) =>
-    link.getAttribute('href'),
-  )
+  return internalHrefs(container)
+}
+
+async function renderInDemoAdminShell(screenElement: ReactNode) {
+  const admin = await demo(demoSource.getAdmin())
+  if (!admin) throw new Error('the demo has an administrator')
+  const { container } = render(<AdminShell admin={admin}>{screenElement}</AdminShell>)
+  return internalHrefs(container)
 }
 
 describe('links inside the demo', () => {
@@ -44,7 +61,7 @@ describe('links inside the demo', () => {
     const hrefs = await renderInDemoShell(<CoursesScreen data={await demo(demoSource.listCourses())} />)
 
     expect(hrefs.length).toBeGreaterThan(0)
-    expect(hrefs.filter((href) => !href?.startsWith('/demo'))).toEqual([])
+    expect(hrefs.filter((href) => !inDemo(href))).toEqual([])
   })
 
   it('stay under /demo on the profile screen', async () => {
@@ -58,6 +75,26 @@ describe('links inside the demo', () => {
     )
 
     expect(hrefs.length).toBeGreaterThan(0)
-    expect(hrefs.filter((href) => !href?.startsWith('/demo'))).toEqual([])
+    expect(hrefs.filter((href) => !inDemo(href))).toEqual([])
+  })
+
+  it('stay under /demo/admin on the overview screen', async () => {
+    navigation.pathname = '/demo/admin'
+    const hrefs = await renderInDemoAdminShell(
+      <AdminOverviewScreen analysis={await demo(demoSource.getCommunityAnalysis())} />,
+    )
+
+    expect(hrefs).toContain('/demo/admin/users')
+    expect(hrefs).toContain('/demo/courses')
+    expect(hrefs.filter((href) => !inDemo(href))).toEqual([])
+  })
+
+  it('stay under /demo/admin on the communities screen', async () => {
+    navigation.pathname = '/demo/admin/communities'
+    const { communities } = await demo(demoSource.listCommunities())
+    const hrefs = await renderInDemoAdminShell(<AdminCommunitiesScreen communities={communities} mode="demo" />)
+
+    expect(hrefs).toContain(`/demo/admin/communities/${communities[0]?.id}`)
+    expect(hrefs.filter((href) => !inDemo(href))).toEqual([])
   })
 })
