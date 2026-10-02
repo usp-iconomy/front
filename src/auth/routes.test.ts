@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPublicPath, safeNextPath, safeRedirect } from './routes'
+import { isPublicPath, nextFromCallbackUrl, safeNextPath, safeRedirect } from './routes'
 
 describe('isPublicPath', () => {
   it.each(['/', '/demo', '/demo/admin/users', '/api/auth/callback/keycloak'])('lets %s through without a session', (path) => {
@@ -63,5 +63,31 @@ describe('safeNextPath', () => {
   it('falls back when the form field is missing or a file', () => {
     expect(safeNextPath(null)).toBe('/courses')
     expect(safeNextPath(new File([], 'x'))).toBe('/courses')
+  })
+})
+
+describe('nextFromCallbackUrl', () => {
+  const origin = 'http://localhost:3000'
+
+  it('keeps path and query of an absolute URL on the app origin', () => {
+    expect(nextFromCallbackUrl('http://localhost:3000/courses?page=2', origin)).toBe('/courses?page=2')
+  })
+
+  it('accepts an in-app path', () => {
+    expect(nextFromCallbackUrl('/admin/users', origin)).toBe('/admin/users')
+  })
+
+  it.each([
+    undefined,
+    '',
+    ['http://localhost:3000/admin'],
+    'http://localhost:3000.evil.example/courses',
+    'https://localhost:3000/courses',
+    'https://evil.example/courses',
+    '//evil.example/courses',
+    'javascript:alert(1)',
+    'not a url',
+  ])('falls back to /courses for %j', (callbackUrl) => {
+    expect(nextFromCallbackUrl(callbackUrl, origin)).toBe('/courses')
   })
 })

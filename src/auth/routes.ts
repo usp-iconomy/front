@@ -35,3 +35,13 @@ export function safeNextPath(next: unknown, fallback = '/courses'): string {
   if (url.origin !== PROBE_ORIGIN) return fallback
   return `${url.pathname}${url.search}${url.hash}`
 }
+
+/** The `next` path for the entry page. Auth.js sends `callbackUrl` as an absolute URL; only the app's own origin is honoured. */
+export function nextFromCallbackUrl(callbackUrl: unknown, appOrigin: string, fallback = '/courses'): string {
+  if (typeof callbackUrl !== 'string') return fallback
+  if (callbackUrl.startsWith('/')) return safeNextPath(callbackUrl, fallback)
+  if (!URL.canParse(callbackUrl)) return fallback
+  const url = new URL(callbackUrl)
+  if (url.origin !== new URL(appOrigin).origin) return fallback
+  return safeNextPath(`${url.pathname}${url.search}${url.hash}`, fallback)
+}

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { TokenAmount } from '@/design-system'
+import { signOutAction } from '@/auth/actions'
 import type { AdminEntry } from '@/lib/admin-access'
 import { pathFor, type Mode } from '@/lib/mode'
 import { roleLabel } from '@/lib/roles'
@@ -55,6 +56,8 @@ export function SiteHeader({ mode, member, wallet, adminEntry }: SiteHeaderProps
                 }
               : undefined
           }
+          signOut={mode === 'real' ? signOutAction : undefined}
+          exitDemoHref={mode === 'demo' ? '/' : undefined}
         />
       </div>
     </header>

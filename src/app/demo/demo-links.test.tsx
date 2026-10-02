@@ -14,6 +14,7 @@ import { ProfileScreen } from '@/screens/ProfileScreen'
 
 const navigation = vi.hoisted(() => ({ pathname: '/demo/courses' }))
 vi.mock('next/navigation', () => ({ usePathname: () => navigation.pathname }))
+vi.mock('@/auth/actions', () => ({ signOutAction: vi.fn() }))
 
 async function demo<T>(result: Promise<Result<T>>): Promise<T> {
   const settled = await result
@@ -28,9 +29,9 @@ function inDemo(href: string | null) {
 async function internalHrefs(container: HTMLElement) {
   // The account menu renders its links only while open.
   await userEvent.setup().click(screen.getByRole('button', { name: /Menu da conta/ }))
-  return [...container.ownerDocument.querySelectorAll<HTMLAnchorElement>('a[href^="/"]')].map((link) =>
-    link.getAttribute('href'),
-  )
+  return [...container.ownerDocument.querySelectorAll<HTMLAnchorElement>('a[href^="/"]')]
+    .filter((link) => link.textContent !== 'Sair da demonstração') // the one deliberate way out, to the entry page
+    .map((link) => link.getAttribute('href'))
 }
 
 async function renderInDemoShell(screenElement: ReactNode) {

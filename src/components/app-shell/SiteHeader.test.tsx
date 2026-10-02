@@ -6,6 +6,7 @@ import { SiteHeader } from './SiteHeader'
 
 const navigation = vi.hoisted(() => ({ pathname: '/courses' }))
 vi.mock('next/navigation', () => ({ usePathname: () => navigation.pathname }))
+vi.mock('@/auth/actions', () => ({ signOutAction: vi.fn() }))
 
 const member: Member = {
   id: 'm1',
@@ -53,7 +54,8 @@ describe('SiteHeader', () => {
     expect(screen.getByRole('link', { name: 'Cursos' })).toHaveAttribute('aria-current', 'page')
     await user.click(screen.getByRole('button', { name: 'Menu da conta: Maria Joana' }))
     const items = screen.getAllByRole('menuitem').map((item) => item.getAttribute('href'))
-    expect(items).toEqual(['/profile', '/admin'])
+    expect(items).toEqual(['/profile', '/admin', null])
+    expect(screen.getAllByRole('menuitem').at(-1)).toHaveTextContent('Sair')
   })
 
   it('keeps demo links in the demo tree and marks the current page', async () => {
@@ -67,6 +69,8 @@ describe('SiteHeader', () => {
     expect(profile).toHaveAttribute('aria-current', 'page')
     await user.click(screen.getByRole('button', { name: 'Menu da conta: Maria Joana' }))
     const items = screen.getAllByRole('menuitem').map((item) => item.getAttribute('href'))
-    expect(items).toEqual(['/demo/profile', '/demo/admin'])
+    expect(items).toEqual(['/demo/profile', '/demo/admin', '/'])
+    expect(screen.getByRole('menuitem', { name: 'Sair da demonstração' })).toHaveAttribute('href', '/')
+    expect(screen.queryByRole('menuitem', { name: 'Sair' })).not.toBeInTheDocument()
   })
 })
