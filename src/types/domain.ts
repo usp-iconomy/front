@@ -103,19 +103,6 @@ export type DonorReport = {
   sentimentSummary: 'positive' | 'negative' | 'neutral'
 }
 
-/** RF-02 — the signed-in member's reputation profile. */
-export type CurrentUser = {
-  id: string
-  name: string
-  role: UserRole
-  tokenBalance: number
-  /** RN-03 — access is judged by what circulated, not by what is held. */
-  circulationCount: number
-  soulTokenCount: number
-  reputationStars: 1 | 2 | 3 | 4 | 5
-  reputationLabel: string
-}
-
 /** RF-01 — who is signed in, as the backend's /auth/me returns it. */
 export type Member = {
   id: string

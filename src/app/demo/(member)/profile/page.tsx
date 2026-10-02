@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { demoSource } from '@/data/demo/source'
 import { ProfileScreen } from '@/screens/ProfileScreen'
 
-export const metadata: Metadata = { title: 'Meu perfil e carteira — USP Iconomy' }
+export const metadata: Metadata = { title: 'Meu perfil e carteira — Demonstração USP Iconomy' }
 
-export default async function ProfilePage() {
+export default async function DemoProfilePage() {
   const [member, wallet, transactions] = await Promise.all([
     demoSource.getMember(),
     demoSource.getWallet(),

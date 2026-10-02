@@ -1,27 +1,26 @@
 import Link from 'next/link'
 import { TokenAmount } from '@/design-system'
-import { adminEntryFor } from '@/lib/admin-access'
+import type { AdminEntry } from '@/lib/admin-access'
+import { pathFor, type Mode } from '@/lib/mode'
 import { roleLabel } from '@/lib/roles'
-import { currentAdmin } from '@/mocks/admin'
-import { currentUser } from '@/mocks/profile'
-import { AccountMenu, type AccountDestination } from './AccountMenu'
+import type { Member, WalletSummary } from '@/types/domain'
+import { AccountMenu } from './AccountMenu'
 import { PrimaryNav } from './PrimaryNav'
 import styles from './SiteHeader.module.css'
 
-const profileLink: AccountDestination = {
-  href: '/profile',
-  label: 'Meu perfil',
-  description: 'Saldo, circulação e Tokens Alma',
-  icon: 'wallet',
+export type SiteHeaderProps = {
+  mode: Mode
+  member: Member
+  /** Null while the wallet has no data source; the balance pill is hidden. */
+  wallet: WalletSummary | null
+  adminEntry: AdminEntry | null
 }
 
-export function SiteHeader() {
-  const adminEntry = currentUser.role === 'admin' ? adminEntryFor(currentAdmin.scope) : null
-
+export function SiteHeader({ mode, member, wallet, adminEntry }: SiteHeaderProps) {
   return (
     <header className={styles.header}>
       <div className={styles.left}>
-        <Link href="/courses" className={styles.logo}>
+        <Link href={pathFor(mode, '/courses')} className={styles.logo}>
           <span className={styles.logoMark} aria-hidden="true">
             U
           </span>
@@ -30,17 +29,26 @@ export function SiteHeader() {
         <PrimaryNav />
       </div>
       <div className={styles.right}>
-        <p className={styles.tokenPill}>
-          <TokenAmount value={currentUser.tokenBalance} showUnit />
-        </p>
+        {wallet && (
+          <p className={styles.tokenPill}>
+            <TokenAmount value={wallet.tokenBalance} showUnit />
+          </p>
+        )}
         <AccountMenu
-          name={currentUser.name}
-          roleLabel={adminEntry?.scopeLabel ?? roleLabel[currentUser.role]}
-          links={[profileLink]}
+          name={member.name}
+          roleLabel={adminEntry?.scopeLabel ?? (member.role ? roleLabel[member.role] : 'Perfil a definir')}
+          links={[
+            {
+              href: pathFor(mode, '/profile'),
+              label: 'Meu perfil',
+              description: 'Saldo, circulação e Tokens Alma',
+              icon: 'wallet',
+            },
+          ]}
           switchTo={
             adminEntry
               ? {
-                  href: adminEntry.href,
+                  href: pathFor(mode, adminEntry.href),
                   label: 'Administração',
                   description: adminEntry.description,
                   icon: 'shield',

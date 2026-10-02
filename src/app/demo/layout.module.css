@@ -1,0 +1,7 @@
+/* Sticky headers inside the demo read this to sit below the banner. */
+.demo {
+  --demo-banner-height: 40px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100%;
+}

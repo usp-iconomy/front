@@ -1,0 +1,33 @@
+.banner {
+  position: sticky;
+  top: 0;
+  /* Above the sticky header it pushes down; the skip link, later in the DOM, still wins. */
+  z-index: calc(var(--z-header) + 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  height: var(--demo-banner-height, 40px);
+  padding: 0 var(--space-4);
+  background: var(--color-accent-light);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
+}
+
+.exit {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 100%;
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
