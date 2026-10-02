@@ -35,12 +35,14 @@ Abra `http://localhost:3000` e escolha "Explorar demonstração", ou vá direto 
 Precisa do backend `usp-iconomy/api` rodando. Em outra pasta:
 
 ```bash
-git clone <url de usp-iconomy/api> && cd api
+git clone git@github.com:usp-iconomy/api.git && cd api
 make setup      # dependências Python e .env
 make up         # Postgres, Redis, Keycloak e Mailpit
 make migrate    # migrações
 make dev        # API em http://localhost:8000
 ```
+
+Para desligar: encerre o `make dev` e rode `make down` na pasta da API.
 
 | Serviço | Endereço |
 |---|---|
