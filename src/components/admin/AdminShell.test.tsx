@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { AdminUser } from '@/types/domain'
 import { AdminShell } from './AdminShell'
@@ -68,5 +69,15 @@ describe('AdminShell', () => {
     render(<AdminShell admin={kalunga}>{null}</AdminShell>)
     expect(screen.queryByRole('link', { name: /usuários e papéis/i })).not.toBeInTheDocument()
     expect(screen.getByRole('link', { name: /minha comunidade/i })).toBeInTheDocument()
+  })
+
+  it('switches to the platform from the account menu', async () => {
+    const user = userEvent.setup()
+    render(<AdminShell admin={usp}>{null}</AdminShell>)
+
+    expect(screen.queryByRole('link', { name: /voltar ao site/i })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Menu da conta: Helena Prado' }))
+
+    expect(screen.getByRole('menuitem', { name: /Plataforma/ })).toHaveAttribute('href', '/courses')
   })
 })

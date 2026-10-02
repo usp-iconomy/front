@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { AdminScope } from '@/types/domain'
-import { adminNavFor, canAccessAdminPath, sectionForPath } from './admin-access'
+import { adminEntryFor, adminNavFor, canAccessAdminPath, sectionForPath } from './admin-access'
 
 const usp: AdminScope = { kind: 'usp' }
 const kalunga: AdminScope = { kind: 'quilombola', communityId: 'kalunga' }
@@ -66,5 +66,23 @@ describe('canAccessAdminPath', () => {
 
   it('lets a quilombola admin open the rate screen', () => {
     expect(canAccessAdminPath(kalunga, '/admin/token-settings')).toBe(true)
+  })
+})
+
+describe('adminEntryFor', () => {
+  it('sends a USP admin to the overview', () => {
+    expect(adminEntryFor(usp)).toEqual({
+      href: '/admin',
+      scopeLabel: 'Administração USP',
+      description: 'Cursos, códigos, taxas e usuários',
+    })
+  })
+
+  it('sends a quilombola admin straight to their own community', () => {
+    expect(adminEntryFor(kalunga)).toEqual({
+      href: '/admin/communities/kalunga',
+      scopeLabel: 'Administração quilombola',
+      description: 'Dados e taxa da sua comunidade',
+    })
   })
 })

@@ -3,9 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
-import { Avatar, Icon } from '@/design-system'
-import { adminNavFor, canAccessAdminPath, sectionForPath } from '@/lib/admin-access'
+import { Icon } from '@/design-system'
+import { adminEntryFor, adminNavFor, canAccessAdminPath, sectionForPath } from '@/lib/admin-access'
 import type { AdminUser } from '@/types/domain'
+import { AccountMenu } from '../app-shell/AccountMenu'
 import { AccessDenied } from './AccessDenied'
 import styles from './AdminShell.module.css'
 
@@ -19,7 +20,7 @@ export function AdminShell({ admin, children }: AdminShellProps) {
   const items = adminNavFor(admin.scope)
   // Unknown paths fall through to Next's 404 instead of reading as a permission problem.
   const denied = sectionForPath(pathname) !== null && !canAccessAdminPath(admin.scope, pathname)
-  const scopeLabel = admin.scope.kind === 'usp' ? 'Administração USP' : 'Administração quilombola'
+  const { scopeLabel } = adminEntryFor(admin.scope)
 
   return (
     <div className={styles.shell}>
@@ -51,15 +52,20 @@ export function AdminShell({ admin, children }: AdminShellProps) {
           </ul>
         </nav>
         <div className={styles.identity}>
-          <Avatar name={admin.name} size="sm" />
-          <div className={styles.identityText}>
-            <p className={styles.adminName}>{admin.name}</p>
-            <p className={styles.adminScope}>{scopeLabel}</p>
-          </div>
+          <AccountMenu
+            name={admin.name}
+            roleLabel={scopeLabel}
+            showIdentity
+            side="top"
+            align="start"
+            switchTo={{
+              href: '/courses',
+              label: 'Plataforma',
+              description: 'Cursos, carteira e circulação',
+              icon: 'school',
+            }}
+          />
         </div>
-        <Link href="/courses" className={styles.exitLink}>
-          Voltar ao site
-        </Link>
       </aside>
       <main id="conteudo" className={styles.main}>
         <div className={styles.container}>{denied ? <AccessDenied /> : children}</div>

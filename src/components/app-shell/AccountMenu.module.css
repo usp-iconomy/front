@@ -1,0 +1,80 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.trigger:hover,
+.trigger[data-state='open'] {
+  background: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.withIdentity {
+  width: 100%;
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  text-align: left;
+}
+
+.identity {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name,
+.headerName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.role,
+.headerRole {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.name,
+.role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.itemDescription {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* The admin sidebar collapses into a top bar on small screens: avatar only. */
+@media (max-width: 768px) {
+  .withIdentity {
+    width: auto;
+    border-radius: var(--radius-pill);
+  }
+
+  .withIdentity .identity {
+    display: none;
+  }
+}

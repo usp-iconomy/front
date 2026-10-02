@@ -21,6 +21,7 @@ export { FlowStep, type FlowStepProps, type FlowStepStatus } from './primitives/
 export { Icon, type IconName, type IconProps } from './primitives/Icon/Icon'
 export { icons } from './primitives/Icon/icons'
 export { InfoBox, type InfoBoxProps } from './primitives/InfoBox/InfoBox'
+export { Menu, MenuItem, MenuSeparator, type MenuProps } from './primitives/Menu/Menu'
 export {
   PageHeader,
   SectionHeader,
