@@ -135,7 +135,7 @@ export function TokenSettingsPanel({ scope, initialSettings, initialOverrides, c
               onChange={(event) => setDraft((current) => ({ ...current, incrementMultiplier: event.target.value }))}
             />
             <p id={`${id}-increment-hint`} className={styles.hint}>
-              1 aplica a fórmula do ARIGATO CREATION como está: enviado × (enviado ÷ saldo).
+              1 aplica a fórmula padrão de incremento (ARIGATO CREATION) como está: enviado × (enviado ÷ saldo).
             </p>
             <p id={`${id}-increment-error`} className={styles.error}>
               {defaultErrors.incrementMultiplier}
