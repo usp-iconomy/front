@@ -12,12 +12,12 @@ import {
 import { SentimentBreakdown } from '@/components/admin/SentimentBreakdown'
 import {
   UNPAID_DEGREES_MAX_SENT_RATIO,
-  VELOCITY_TARGET,
   rankCourses,
   sentimentShares,
   topContributors,
   unpaidDegrees,
   velocity,
+  velocityCaption,
 } from '@/lib/community-analysis'
 import { formatDate, formatDecimal, formatNumber } from '@/lib/format'
 import { communityAnalysis } from '@/mocks/admin-analysis'
@@ -46,7 +46,7 @@ export default function AdminOverviewPage() {
     <>
       <PageHeader
         title="Visão geral da comunidade"
-        description={`De ${formatDate(analysis.periodStart)} a ${formatDate(analysis.periodEnd)}, pela Community Analysis do Explorer.`}
+        description={`De ${formatDate(analysis.periodStart)} a ${formatDate(analysis.periodEnd)}, pela análise de comunidade (Community Analysis) do Peace Coin Explorer.`}
       />
 
       <StatGrid>
@@ -54,11 +54,7 @@ export default function AdminOverviewPage() {
           icon="arrows"
           label="Velocidade de circulação"
           value={formatDecimal(currentVelocity)}
-          caption={
-            currentVelocity > VELOCITY_TARGET
-              ? `Acima da meta de ${VELOCITY_TARGET}`
-              : `Abaixo da meta de ${VELOCITY_TARGET}`
-          }
+          caption={velocityCaption(currentVelocity)}
         />
         <StatBox icon="chart" label="Tokens circulados" value={formatNumber(analysis.tokensCirculated)} />
         <StatBox icon="wallet" label="Tokens em existência" value={formatNumber(analysis.totalSupply)} />

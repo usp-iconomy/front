@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { MemberCirculation } from '@/types/domain'
-import { rankCourses, sentimentShares, topContributors, unpaidDegrees, velocity } from './community-analysis'
+import { rankCourses, sentimentShares, topContributors, unpaidDegrees, velocity, velocityCaption } from './community-analysis'
 
 const members: readonly MemberCirculation[] = [
   { memberId: 'a', name: 'Ana', balance: 800, sent: 20 },
@@ -70,5 +70,13 @@ describe('rankCourses', () => {
       { courseId: 'y', title: 'Y', tokensCirculated: 90 },
     ])
     expect(ranked.map((course) => course.courseId)).toEqual(['y', 'x'])
+  })
+})
+
+describe('velocityCaption', () => {
+  it('names above, at and below the target of 2', () => {
+    expect(velocityCaption(2.1)).toBe('Acima da meta de 2')
+    expect(velocityCaption(2)).toBe('Na meta de 2')
+    expect(velocityCaption(1.9)).toBe('Abaixo da meta de 2')
   })
 })

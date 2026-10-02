@@ -13,6 +13,12 @@ export function velocity(tokensCirculated: number, totalSupply: number): number 
   return tokensCirculated / totalSupply
 }
 
+export function velocityCaption(value: number): string {
+  if (value > VELOCITY_TARGET) return `Acima da meta de ${VELOCITY_TARGET}`
+  if (value === VELOCITY_TARGET) return `Na meta de ${VELOCITY_TARGET}`
+  return `Abaixo da meta de ${VELOCITY_TARGET}`
+}
+
 /** Largest-remainder rounding, so the three bars always add up to 100%. */
 export function sentimentShares(counts: Record<MessageSentiment, number>): Record<MessageSentiment, number> {
   const shares: Record<MessageSentiment, number> = { positive: 0, neutral: 0, negative: 0 }
