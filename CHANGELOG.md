@@ -13,3 +13,4 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/admin/communities`: comunidades quilombolas com participação por território, memória coletiva (eventos e Tokens Alma por membro) e exportação CSV para relatórios e editais. A USP só vê o detalhe territorial com autorização da comunidade (RN-09).
 - `/admin/token-settings`: multiplicador do incremento e decaimento semanal, com revisão antes/depois. A taxa de cada comunidade quilombola fica sempre abaixo da padrão (RN-07), e o admin quilombola só altera a da própria comunidade.
 - `/admin/users`: busca de usuários por nome ou e-mail (sem precisar de acento), filtro por papel e troca de papel. Ninguém muda o próprio papel, e a última pessoa na administração não perde o papel.
+- Página 404 em português com atalhos para os cursos e para a administração.
