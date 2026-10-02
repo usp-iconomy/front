@@ -15,7 +15,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/demo/admin/token-settings`: multiplicador do incremento e decaimento semanal, com revisão antes/depois. A taxa de cada comunidade quilombola fica sempre abaixo da padrão (RN-07), e o admin quilombola só altera a da própria comunidade.
 - `/demo/admin/users`: busca de usuários por nome ou e-mail (sem precisar de acento), filtro por papel e troca de papel. Ninguém muda o próprio papel, e a última pessoa na administração não perde o papel.
 - Tela de entrada em `/`: entrar, criar conta ou explorar a demonstração sem login, em `/demo`. Na demonstração, uma faixa fixa avisa que os dados são fictícios.
-- Página 404 em português com atalhos para os cursos e para a administração. Quem vem da demonstração continua nela: os atalhos levam a `/demo/courses` e `/demo/admin`.
+- Página 404 em português com atalhos para os cursos e para a administração. Um endereço inexistente sob `/demo` mostra a 404 dentro da demonstração, com a faixa e atalhos para `/demo/courses` e `/demo/admin`. `/demo` sozinho abre os cursos da demonstração.
 
 ### Changed
 
