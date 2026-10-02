@@ -33,6 +33,8 @@ export function safeNextPath(next: unknown, fallback = '/courses'): string {
   // The URL parser drops tabs and newlines, so "/\t/evil.example" resolves to another host.
   const url = new URL(next, PROBE_ORIGIN)
   if (url.origin !== PROBE_ORIGIN) return fallback
+  // Dot segments can collapse to "//host", which a browser reads as another origin.
+  if (url.pathname.startsWith('//')) return fallback
   return `${url.pathname}${url.search}${url.hash}`
 }
 

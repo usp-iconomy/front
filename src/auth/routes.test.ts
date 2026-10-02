@@ -60,6 +60,10 @@ describe('safeNextPath', () => {
     },
   )
 
+  it.each(['/.//evil.example', '/..//x', '/%2e//x', '/./\\x'])('falls back for %j, which normalizes to "//"', (next) => {
+    expect(safeNextPath(next)).toBe('/courses')
+  })
+
   it('falls back when the form field is missing or a file', () => {
     expect(safeNextPath(null)).toBe('/courses')
     expect(safeNextPath(new File([], 'x'))).toBe('/courses')
