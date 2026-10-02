@@ -16,7 +16,7 @@ describe.each(routes)('real $route', ({ route, Page, title, file }) => {
     render(<Page />)
 
     expect(screen.getByRole('heading', { level: 1, name: title })).toBeInTheDocument()
-    expect(screen.getByText('Esta área ainda não está ligada ao servidor.')).toBeInTheDocument()
+    expect(screen.getByText('Esta área ainda está em construção e não está ligada ao servidor.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Ver na demonstração' })).toHaveAttribute('href', `/demo${route}`)
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
     expect(screen.queryByRole('button')).not.toBeInTheDocument()

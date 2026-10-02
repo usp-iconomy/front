@@ -12,8 +12,7 @@ export type UnderConstructionProps = {
 export function UnderConstruction({ title, demoPath }: UnderConstructionProps) {
   return (
     <section className={styles.section}>
-      <p className={styles.eyebrow}>Em construção</p>
-      <PageHeader title={title} description="Esta área ainda não está ligada ao servidor." />
+      <PageHeader title={title} description="Esta área ainda está em construção e não está ligada ao servidor." />
       <Link href={demoPath} className={styles.demoLink}>
         Ver na demonstração
       </Link>

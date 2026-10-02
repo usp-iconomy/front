@@ -9,7 +9,8 @@ describe('UnderConstruction', () => {
     render(<UnderConstruction title="Descobrir cursos" demoPath="/demo/courses" />)
 
     expect(screen.getByRole('heading', { level: 1, name: 'Descobrir cursos' })).toBeInTheDocument()
-    expect(screen.getByText('Esta área ainda não está ligada ao servidor.')).toBeInTheDocument()
+    expect(screen.getByText('Esta área ainda está em construção e não está ligada ao servidor.')).toBeInTheDocument()
+    expect(screen.queryByText('Em construção')).not.toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Ver na demonstração' })).toHaveAttribute('href', '/demo/courses')
   })
 
