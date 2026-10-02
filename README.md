@@ -64,14 +64,15 @@ aceita redirect para `http://localhost:3000/*`; em outra porta o login falha.
 
 Usuários de teste do realm, todos com a senha `iconomy2026`:
 
-| Usuário | Papel |
+| Usuário | Sugestão de uso |
 |---|---|
-| `professora@usp.br` | Docência |
-| `aluno@example.org` | Estudante |
-| `doador@example.org` | Doação |
+| `professora@usp.br` | Escolher Docência |
+| `aluno@example.org` | Escolher Estudante |
+| `doador@example.org` | Escolher Doação |
 
 O realm também permite criar conta, e exige verificação de e-mail (o link chega
-no Mailpit). Quem entra sem papel escolhe um na tela de onboarding.
+no Mailpit). Nenhum usuário vem com papel: cada pessoa escolhe o seu na tela de
+onboarding, no primeiro login.
 Administração não é autoatribuível: o papel `admin` vem do backend.
 
 | Script | O que faz |
@@ -108,6 +109,7 @@ real, a coluna "Real" diz o que aparece hoje.
 | Admin: taxas | `/admin/token-settings` | `/demo/admin/token-settings` | Taxas de incremento e decaimento (RF-07) |
 | Admin: usuários | `/admin/users` | `/demo/admin/users` | Usuários e papéis (RF-14) |
 | Admin: comunidades | `/admin/communities` | `/demo/admin/communities` | Comunidades quilombolas e memória coletiva (RF-13) |
+| Admin: comunidade | `/admin/communities/[id]` | `/demo/admin/communities/[id]` | Detalhe de uma comunidade |
 
 **"Em construção" no modo real.** Toda tela da coluna "Real" mostra "Esta área
 ainda não está ligada ao servidor", com o link "Ver na demonstração", porque a
