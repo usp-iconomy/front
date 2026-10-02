@@ -108,6 +108,26 @@ describe('refreshTokens', () => {
     expect(warned()).toContain('TypeError')
   })
 
+  it('gives up after 10 seconds and marks the session as failed', async () => {
+    const controller = new AbortController()
+    const timeout = vi.spyOn(AbortSignal, 'timeout').mockReturnValue(controller.signal)
+    const fetchImpl = vi.fn<typeof fetch>(
+      (_url, init) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))
+        }),
+    )
+
+    const pending = refreshTokens(tokens, { ...options, fetchImpl })
+    controller.abort(new DOMException('The operation timed out.', 'TimeoutError'))
+    const refreshed = await pending
+
+    expect(timeout).toHaveBeenCalledWith(10_000)
+    expect(refreshed).toEqual({ ...tokens, error: 'RefreshFailed' })
+    expect(warned()).toContain('TimeoutError')
+    timeout.mockRestore()
+  })
+
   it.each([
     ['no access_token', { expires_in: 300 }],
     ['a non-string access_token', { access_token: 42, expires_in: 300 }],

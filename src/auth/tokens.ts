@@ -1,6 +1,8 @@
 /** Refresh this long before expiry: proxy refreshes while the old token still covers the current request. */
 export const REFRESH_MARGIN_SECONDS = 60
 
+const REFRESH_TIMEOUT_MS = 10_000
+
 export type SessionTokens = {
   accessToken: string
   refreshToken: string
@@ -35,6 +37,7 @@ export async function refreshTokens(
         client_id: options.clientId,
         refresh_token: tokens.refreshToken,
       }),
+      signal: AbortSignal.timeout(REFRESH_TIMEOUT_MS),
     })
     if (!response.ok) return failed(`HTTP ${response.status}`)
     const body = (await response.json()) as TokenResponse
@@ -49,7 +52,9 @@ export async function refreshTokens(
       expiresAt: options.nowSeconds + body.expires_in,
     }
   } catch (error) {
-    return failed(error instanceof Error ? error.name : 'unknown error')
+    // By name, not instanceof: a timeout rejects with a DOMException, which is not an Error in every realm.
+    const name = (error as { name?: unknown } | null)?.name
+    return failed(typeof name === 'string' ? name : 'unknown error')
   }
 }
 

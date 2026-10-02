@@ -40,6 +40,17 @@ describe('createSingleFlightRefresh', () => {
     expect(first.accessToken).not.toBe(second.accessToken)
   })
 
+  it('hands one failed refresh to every concurrent caller instead of retrying the consumed token', async () => {
+    const refresh = vi.fn(async (tokens: SessionTokens): Promise<SessionTokens> => ({ ...tokens, error: 'RefreshFailed' }))
+    const refreshOnce = createSingleFlightRefresh(refresh, () => 0)
+
+    const results = await Promise.all([refreshOnce(session('r1')), refreshOnce(session('r1'))])
+    const later = await refreshOnce(session('r1'))
+
+    expect(refresh).toHaveBeenCalledTimes(1)
+    for (const result of [...results, later]) expect(result.error).toBe('RefreshFailed')
+  })
+
   it('hands the settled result to a request arriving just after, within the reuse window', async () => {
     const { clock, refresh, refreshOnce } = setup()
     const first = await refreshOnce(session('r1'))
