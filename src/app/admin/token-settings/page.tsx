@@ -1,25 +1,23 @@
 import type { Metadata } from 'next'
-import { PageHeader } from '@/design-system'
-import { TokenSettingsPanel } from '@/components/admin/TokenSettingsPanel'
-import { currentAdmin } from '@/mocks/admin'
-import { quilombolaCommunities } from '@/mocks/communities'
-import { communityRateOverrides, tokenRateSettings } from '@/mocks/token-settings'
+import { demoSource } from '@/data/demo/source'
+import { AdminTokenSettingsScreen } from '@/screens/AdminTokenSettingsScreen'
 
 export const metadata: Metadata = { title: 'Taxas do token — Administração USP Iconomy' }
 
-export default function AdminTokenSettingsPage() {
+export default async function AdminTokenSettingsPage() {
+  const [admin, rates, communities] = await Promise.all([
+    demoSource.getAdmin(),
+    demoSource.getTokenRates(),
+    demoSource.listCommunities(),
+  ])
+  if (admin.status !== 'ok' || !admin.data || rates.status !== 'ok' || communities.status !== 'ok') {
+    throw new Error('demo source always answers')
+  }
   return (
-    <>
-      <PageHeader
-        title="Taxas do token UAIFAI"
-        description="Quanto quem envia ganha de volta e quanto um saldo parado perde por semana. Toda mudança passa por uma revisão antes de valer."
-      />
-      <TokenSettingsPanel
-        scope={currentAdmin.scope}
-        initialSettings={tokenRateSettings}
-        initialOverrides={communityRateOverrides}
-        communities={quilombolaCommunities.map(({ id, name }) => ({ id, name }))}
-      />
-    </>
+    <AdminTokenSettingsScreen
+      scope={admin.data.scope}
+      rates={rates.data}
+      communities={communities.data.communities.map(({ id, name }) => ({ id, name }))}
+    />
   )
 }
