@@ -5,6 +5,7 @@ export { Badge, type BadgeProps } from './primitives/Badge/Badge'
 export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from './primitives/Button/Button'
 export { Card, type CardProps } from './primitives/Card/Card'
 export { Chip, type ChipProps } from './primitives/Chip/Chip'
+export { ConfirmDialog, type ConfirmDialogProps } from './primitives/ConfirmDialog/ConfirmDialog'
 export { DataTable, type Column, type DataTableProps } from './primitives/DataTable/DataTable'
 export { Divider } from './primitives/Divider/Divider'
 export {
