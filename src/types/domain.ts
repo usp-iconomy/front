@@ -154,3 +154,27 @@ export type CommunityAnalysis = {
   members: readonly MemberCirculation[]
   courses: readonly CourseCirculation[]
 }
+
+/** Course approval. Not in the technical documentation; see admin spec D5. */
+export type CourseReviewStatus = 'pending_review' | 'changes_requested' | 'published' | 'rejected'
+
+export type CourseReviewEvent = {
+  status: CourseReviewStatus
+  at: string
+  actorName: string
+  /** Required when the status is changes_requested or rejected. */
+  note?: string
+}
+
+export type CourseSubmission = {
+  course: Course
+  submittedBy: string
+  status: CourseReviewStatus
+  /** Oldest first. The first entry is the submission itself. */
+  history: readonly CourseReviewEvent[]
+}
+
+export type ReviewDecision =
+  | { kind: 'approve' }
+  | { kind: 'request_changes'; note: string }
+  | { kind: 'reject'; note: string }
