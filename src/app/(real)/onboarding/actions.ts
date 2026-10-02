@@ -1,0 +1,34 @@
+'use server'
+
+import { redirect } from 'next/navigation'
+import { ApiError } from '@/data/api/client'
+import { chooseRole } from '@/data/api/source'
+import { EMPTY_CHOICE_MESSAGE } from '@/lib/onboarding'
+import type { OnboardingRole, OnboardingState } from '@/screens/OnboardingScreen'
+import { SESSION_EXPIRED_PATH } from '../member-status'
+
+const roles: ReadonlySet<string> = new Set<OnboardingRole>(['student', 'teacher', 'donor'])
+
+function isOnboardingRole(value: FormDataEntryValue | null): value is OnboardingRole {
+  return typeof value === 'string' && roles.has(value)
+}
+
+export async function chooseRoleAction(_state: OnboardingState, formData: FormData): Promise<OnboardingState> {
+  const role = formData.get('role')
+  if (!isOnboardingRole(role)) return { error: EMPTY_CHOICE_MESSAGE, role: null }
+
+  try {
+    await chooseRole(role)
+  } catch (error) {
+    if (!(error instanceof ApiError)) throw error
+    if (error.status === 401) redirect(SESSION_EXPIRED_PATH)
+    // 403: the account is disabled. The onboarding page reads /auth/me again and shows "Acesso restrito".
+    if (error.status === 403) redirect('/onboarding')
+    // 409: the role was already chosen, say in another tab. Onboarding is over either way.
+    if (error.status === 409) redirect('/courses')
+    if (error.status === 422) return { error: error.detail || 'Não foi possível salvar esse perfil.', role }
+    throw error
+  }
+  // Never re-read the member here: /auth/me is memoized for this request and still says onboardingRequired.
+  redirect('/courses')
+}

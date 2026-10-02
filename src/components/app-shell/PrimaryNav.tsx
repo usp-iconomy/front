@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icon } from '@/design-system'
-import { navItems } from '@/lib/nav'
+import { isCurrentNavItem, navItems } from '@/lib/nav'
+import { ModeLink } from './ModeLink'
 import styles from './PrimaryNav.module.css'
 
 export function PrimaryNav() {
@@ -13,17 +13,17 @@ export function PrimaryNav() {
     <nav className={styles.nav} aria-label="Navegação principal">
       <ul className={styles.list}>
         {navItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = isCurrentNavItem(item, pathname)
           return (
             <li key={item.href}>
-              <Link
+              <ModeLink
                 href={item.href}
                 className={`${styles.link} ${isActive ? styles.active : ''}`.trim()}
                 aria-current={isActive ? 'page' : undefined}
               >
                 <Icon name={item.icon} size={14} />
                 {item.label}
-              </Link>
+              </ModeLink>
             </li>
           )
         })}

@@ -1,10 +1,15 @@
-import type { CurrentUser, SoulToken, Transaction } from '@/types/domain'
+import type { Member, SoulToken, Transaction, WalletSummary } from '@/types/domain'
 
 /** Same person as currentAdmin in mocks/admin.ts: one session, two interfaces. */
-export const currentUser: CurrentUser = {
+export const demoMember: Member = {
   id: 'admin-usp-1',
   name: 'Helena Prado',
+  email: 'helena.prado@usp.br',
   role: 'admin',
+  isInstitutional: true,
+}
+
+export const demoWallet: WalletSummary = {
   tokenBalance: 450,
   circulationCount: 18,
   soulTokenCount: 3,

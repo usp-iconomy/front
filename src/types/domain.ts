@@ -103,13 +103,19 @@ export type DonorReport = {
   sentimentSummary: 'positive' | 'negative' | 'neutral'
 }
 
-/** RF-02 — the signed-in member's reputation profile. */
-export type CurrentUser = {
+/** RF-01 — who is signed in, as the backend's /auth/me returns it. */
+export type Member = {
   id: string
   name: string
-  role: UserRole
+  email: string
+  /** Null until onboarding; `admin` is never self-assigned. */
+  role: UserRole | null
+  isInstitutional: boolean
+}
+
+/** RF-02 — wallet figures. Not served by the backend yet. */
+export type WalletSummary = {
   tokenBalance: number
-  /** RN-03 — access is judged by what circulated, not by what is held. */
   circulationCount: number
   soulTokenCount: number
   reputationStars: 1 | 2 | 3 | 4 | 5

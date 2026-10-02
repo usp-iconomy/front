@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { Icon } from '@/design-system'
 import { adminEntryFor, adminNavFor, canAccessAdminPath, sectionForPath } from '@/lib/admin-access'
+import { signOutAction } from '@/auth/actions'
+import { modeFromPath, pathFor, stripMode } from '@/lib/mode'
 import type { AdminUser } from '@/types/domain'
 import { AccountMenu } from '../app-shell/AccountMenu'
 import { AccessDenied } from './AccessDenied'
@@ -17,9 +19,11 @@ type AdminShellProps = {
 
 export function AdminShell({ admin, children }: AdminShellProps) {
   const pathname = usePathname()
+  const mode = modeFromPath(pathname)
+  const appPath = stripMode(pathname)
   const items = adminNavFor(admin.scope)
   // Unknown paths fall through to Next's 404 instead of reading as a permission problem.
-  const denied = sectionForPath(pathname) !== null && !canAccessAdminPath(admin.scope, pathname)
+  const denied = sectionForPath(appPath) !== null && !canAccessAdminPath(admin.scope, appPath)
   const { scopeLabel } = adminEntryFor(admin.scope)
 
   return (
@@ -28,18 +32,18 @@ export function AdminShell({ admin, children }: AdminShellProps) {
         Pular para o conteúdo
       </a>
       <aside className={styles.sidebar}>
-        <Link href={items[0]?.href ?? '/admin'} className={styles.logo}>
+        <Link href={pathFor(mode, items[0]?.href ?? '/admin')} className={styles.logo}>
           USP Iconomy <span className={styles.logoTag}>Admin</span>
         </Link>
         <nav aria-label="Navegação administrativa" className={styles.nav}>
           <ul className={styles.navList}>
             {items.map((item) => {
               const isActive =
-                item.href === '/admin' ? pathname === '/admin' : pathname === item.href || pathname.startsWith(`${item.href}/`)
+                item.href === '/admin' ? appPath === '/admin' : appPath === item.href || appPath.startsWith(`${item.href}/`)
               return (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={pathFor(mode, item.href)}
                     className={`${styles.link} ${isActive ? styles.active : ''}`.trim()}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -58,8 +62,10 @@ export function AdminShell({ admin, children }: AdminShellProps) {
             showIdentity
             side="top"
             align="start"
+            signOut={mode === 'real' ? signOutAction : undefined}
+            exitDemoHref={mode === 'demo' ? '/' : undefined}
             switchTo={{
-              href: '/courses',
+              href: pathFor(mode, '/courses'),
               label: 'Plataforma',
               description: 'Cursos, carteira e circulação',
               icon: 'school',

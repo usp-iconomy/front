@@ -52,6 +52,15 @@
   white-space: nowrap;
 }
 
+/* The sign-out item is a button inside a form; strip the button chrome so it matches the link items. */
+.exitButton {
+  width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+}
+
 .itemText {
   display: flex;
   flex-direction: column;

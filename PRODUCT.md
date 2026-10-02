@@ -46,8 +46,8 @@ capital financeiro. Não é um LMS nem uma loja de cursos.
 - Projeto de extensão USP (disciplina PRO3563), com relatórios para a
   disciplina e para o IEA. A demonstração para a banca pesa tanto quanto o uso
   real nesta fase.
-- Backend previsto: API do Peace Coin Explorer. Carteira: Peace Coin Wallet
-  (iOS, Android e web), fora deste repositório.
+- Backend: `usp-iconomy/api`, com identidade no Keycloak. Carteira: Peace Coin
+  Wallet (iOS, Android e web), fora deste repositório.
 - Bolsas chegam às comunidades por parceiros locais, com códigos exportados
   em CSV. Dados quilombolas alimentam relatórios para a Funai e editais.
 - Quatro tipos de acesso a curso: aberto, por circulação nos últimos 30 dias,
@@ -55,11 +55,15 @@ capital financeiro. Não é um LMS nem uma loja de cursos.
 
 ## Capabilities and Constraints
 
-- Telas de membro, doação e backoffice `/admin` (em construção) rodam sobre
-  dados de exemplo em `src/mocks/`. Nenhuma chamada de rede.
+- Dois modos, cada um na sua árvore de URLs. A demonstração (`/demo/...`) roda
+  sobre dados de exemplo em `src/mocks/`, sem login e sem chamada de rede. O
+  modo real (demais rotas) fala com `usp-iconomy/api` pelo servidor do Next.
+- Login real pelo Keycloak (realm `iconomy`), membro e perfil vindos de
+  `usp-iconomy/api`. As demais áreas aparecem como "Em construção" no modo real
+  e completas em `/demo`.
 - Existe acesso a dados reais do Peace Coin Explorer. **Em aberto:** quais
-  dados, por qual API, e quando o app passa a consumi-los.
-- Autenticação (RF-01) está adiada; a sessão é simulada.
+  dados, por qual API, e quando o app passa a consumi-los. Hoje o app não os
+  consome.
 - Termos: na interface, SBT é "Token Alma"; "código de distribuição", não
   cupom; papéis são funções (Estudante, Docência, Administração, Doação).
 - Regras de negócio em `docs/superpowers/specs/` e na doc técnica

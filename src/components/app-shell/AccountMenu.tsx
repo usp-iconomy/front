@@ -18,6 +18,10 @@ export type AccountMenuProps = {
   links?: readonly AccountDestination[]
   /** The other interface this account can use. Absent for accounts with only one. */
   switchTo?: AccountDestination
+  /** Real mode: ends the session. Rendered as the menu's last item. */
+  signOut?: () => void | Promise<void>
+  /** Demo mode: where "Sair da demonstração" leads. */
+  exitDemoHref?: string
   /** Shows name and role inside the trigger, for the admin sidebar. */
   showIdentity?: boolean
   side?: 'top' | 'bottom'
@@ -43,6 +47,8 @@ export function AccountMenu({
   roleLabel,
   links = [],
   switchTo,
+  signOut,
+  exitDemoHref,
   showIdentity = false,
   side,
   align,
@@ -84,6 +90,24 @@ export function AccountMenu({
           {links.length > 0 && <MenuSeparator />}
           <Destination destination={switchTo} />
         </>
+      )}
+      {(signOut || exitDemoHref) && (links.length > 0 || switchTo) && <MenuSeparator />}
+      {signOut && (
+        <form action={signOut}>
+          {/* The form lives inside the menu: closing it on select would detach the form before it submits. */}
+          <MenuItem onSelect={(event) => event.preventDefault()}>
+            <button type="submit" className={styles.exitButton}>
+              <span className={styles.itemLabel}>Sair</span>
+            </button>
+          </MenuItem>
+        </form>
+      )}
+      {exitDemoHref && (
+        <MenuItem>
+          <Link href={exitDemoHref}>
+            <span className={styles.itemLabel}>Sair da demonstração</span>
+          </Link>
+        </MenuItem>
       )}
     </Menu>
   )
