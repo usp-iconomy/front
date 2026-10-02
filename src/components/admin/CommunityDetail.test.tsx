@@ -40,4 +40,10 @@ describe('CommunityDetail', () => {
     expect(screen.getAllByText('Engenho II').length).toBeGreaterThan(0)
     expect(screen.getByRole('button', { name: /exportar/i })).toBeInTheDocument()
   })
+
+  it('speaks in Token Alma and singular members', () => {
+    render(<CommunityDetail community={{ ...community, members: 1 }} events={events} detailVisible />)
+    expect(screen.getByText(/Cavalcante, GO · 1 membro$/)).toBeInTheDocument()
+    expect(screen.getByRole('table', { name: 'Eventos presenciais com Token Alma' })).toBeInTheDocument()
+  })
 })

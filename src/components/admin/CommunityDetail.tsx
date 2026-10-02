@@ -59,7 +59,7 @@ export function CommunityDetail({ community, events, detailVisible }: CommunityD
     <>
       <PageHeader
         title={community.name}
-        description={`${community.territory} · ${formatNumber(community.members)} membros`}
+        description={`${community.territory} · ${formatNumber(community.members)} ${community.members === 1 ? 'membro' : 'membros'}`}
       />
 
       <StatGrid>
@@ -87,7 +87,7 @@ export function CommunityDetail({ community, events, detailVisible }: CommunityD
           />
 
           <SectionHeader title="Memória coletiva: eventos" />
-          <DataTable caption="Eventos presenciais com SBT" columns={eventColumns} rows={chronological} rowKey={(row) => row.id} />
+          <DataTable caption="Eventos presenciais com Token Alma" columns={eventColumns} rows={chronological} rowKey={(row) => row.id} />
 
           <SectionHeader title="Memória coletiva: membros" />
           <DataTable
