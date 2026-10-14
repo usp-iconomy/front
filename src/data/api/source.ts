@@ -4,6 +4,7 @@ import { ok, unavailable, type DataSource } from '../contracts'
 import type { Member } from '@/types/domain'
 import { ApiError, createApiClient } from './client'
 import type { ApiCurrentUser, ApiUser } from './me'
+import { toWalletSummary, type ApiWalletSummary } from './wallet'
 
 type ApiClient = ReturnType<typeof createApiClient>
 export type ApiSourceDeps = {
@@ -76,7 +77,12 @@ export function createApiSource(deps: ApiSourceDeps = {}): DataSource {
       if (user.role !== 'admin') return ok(null)
       return ok({ id: user.id, name: user.name, email: user.email, scope: { kind: 'usp' } })
     },
-    getWallet: async () => unavailable,
+    getWallet: async () => {
+      const summary = await client.request<ApiWalletSummary>('/wallet/me', {
+        accessToken: await requireToken(getAccessToken),
+      })
+      return ok(toWalletSummary(summary))
+    },
     listCourses: async () => unavailable,
     listCirculation: async () => unavailable,
     listTransactions: async () => unavailable,
