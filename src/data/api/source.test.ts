@@ -7,8 +7,7 @@ import { chooseRole, createApiSource, getMemberStatus } from './source'
 type Method = Exclude<keyof DataSource, 'mode'>
 
 // A Record keyed by the type makes a new DataSource method a compile error here.
-const unservedMethods: Record<Exclude<Method, 'getMember' | 'getAdmin'>, true> = {
-  getWallet: true,
+const unservedMethods: Record<Exclude<Method, 'getMember' | 'getAdmin' | 'getWallet'>, true> = {
   listCourses: true,
   listCirculation: true,
   listTransactions: true,
@@ -81,6 +80,35 @@ describe('createApiSource', () => {
   it.each(['student', 'teacher', 'donor', null] as const)('answers ok(null) for admin when role is %s', async (role) => {
     const { deps } = setup({ user: { ...apiUser, role } })
     expect(await createApiSource(deps).getAdmin()).toEqual({ status: 'ok', data: null })
+  })
+
+  it('maps /wallet/me to a WalletSummary', async () => {
+    const walletPayload = {
+      tokenBalance: 1_000_000,
+      circulationCount: 0,
+      soulTokenCount: 0,
+      reputationStars: 5 as const,
+      reputationLabel: 'Semeadora',
+    }
+    const request = vi.fn(async (path: string) =>
+      path === '/wallet/me' ? walletPayload : ({ user: apiUser, onboardingRequired: false, emailVerified: true } satisfies ApiCurrentUser),
+    )
+    const deps = {
+      getAccessToken: async () => 'tok',
+      client: { request } as unknown as ReturnType<typeof createApiClient>,
+    }
+    expect(await createApiSource(deps).getWallet()).toEqual({ status: 'ok', data: walletPayload })
+    expect(request).toHaveBeenCalledWith('/wallet/me', { accessToken: 'tok' })
+  })
+
+  it('throws a 401 ApiError from getWallet without an access token', async () => {
+    const { deps, request } = setup({}, null)
+    const error = await createApiSource(deps)
+      .getWallet()
+      .catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error).toMatchObject({ status: 401, code: 'unauthorized' })
+    expect(request).not.toHaveBeenCalled()
   })
 
   it.each(Object.keys(unservedMethods) as (keyof typeof unservedMethods)[])(
